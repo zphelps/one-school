@@ -105,6 +105,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
             isAuthenticated: true,
             user: {
               id: firebaseUser.uid,
+              tenantID: firebaseUser.tenantId ?? '',
               email: user?.email,
               firstName: user?.firstName,
               lastName: user?.lastName,

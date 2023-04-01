@@ -2,7 +2,9 @@ import {lazy, Suspense} from 'react';
 import type {RouteObject} from 'react-router';
 import {Outlet} from 'react-router-dom';
 import {Layout as DashboardLayout} from '../layouts/dashboard';
-import {Home} from "../pages/home";
+import {Home} from "../pages/home/home";
+import {EventsCalendar} from "../pages/calendar/calendar";
+import {EventDetails} from "../pages/events/event-details";
 
 export const dashboardRoutes: RouteObject[] = [
     {
@@ -29,11 +31,20 @@ export const dashboardRoutes: RouteObject[] = [
                 ]
             },
             {
+               path: 'events/:eventId',
+                children: [
+                    {
+                        index: true,
+                        element: <EventDetails />
+                    }
+                ]
+            },
+            {
                 path: 'calendar',
                 children: [
                     {
                         index: true,
-                        element: <div>Calendar</div>
+                        element: <EventsCalendar/>
                     }
                 ]
             },

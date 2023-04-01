@@ -27,13 +27,13 @@ export const useCollection = (_collection: any, _queries: any[], _orderBy: any[]
                 }
             } else {
                 // @ts-ignore
-                ref = collection(db, _collection);
+                ref = collection(ref, _collection);
             }
 
-            // if (_queries) {
-            //     // @ts-ignore
-            //     ref = query(ref, ..._queries)
-            // }
+            if (_queries) {
+                // @ts-ignore
+                ref = query(ref, ..._queries)
+            }
             // if (_orderBy) {
             //     // @ts-ignore
             //     ref = orderBy(ref, ..._orderBy)

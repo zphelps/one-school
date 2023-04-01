@@ -12,6 +12,7 @@ export const paths = {
     details: '/alerts/:alertId'
   },
   calendar: '/calendar',
+  events: '/events',
   groups: {
     index: '/groups',
     create: '/groups/create',

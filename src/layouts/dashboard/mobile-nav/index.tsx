@@ -151,24 +151,14 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
             spacing={2}
             sx={{ p: 3 }}
           >
-            <Box
-              component={RouterLink}
-              href={paths.index}
-              sx={{
-                borderColor: 'var(--nav-logo-border)',
-                borderRadius: 1,
-                borderStyle: 'solid',
-                borderWidth: 1,
-                display: 'flex',
-                height: 40,
-                p: '4px',
-                width: 40
-              }}
+            <img style={{height: '40px', width: '35px'}} src="src/assets/Logo.PNG"></img>
+            <Typography
+                variant="h5"
+                sx={{fontFamily: (theme) => theme.typography.fontFamily,
+                  color: (theme) => theme.palette.text.secondary}}
             >
-              TODO: uncomment when logo is ready
-              {/*<Logo />*/}
-            </Box>
-            <TenantSwitch sx={{ flexGrow: 1 }} />
+              OneSchool
+            </Typography>
           </Stack>
           <Stack
             component="nav"
@@ -187,35 +177,6 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
               />
             ))}
           </Stack>
-          <Box sx={{ p: 3 }}>
-            <Typography
-              color="neutral.400"
-              variant="subtitle1"
-            >
-              Need help?
-            </Typography>
-            <Typography
-              color="neutral.400"
-              sx={{ mb: 2 }}
-              variant="body2"
-            >
-              Please check our docs.
-            </Typography>
-            <Button
-              component="a"
-              fullWidth
-              href={paths.docs}
-              startIcon={(
-                <SvgIcon>
-                  <File04Icon />
-                </SvgIcon>
-              )}
-              target="_blank"
-              variant="contained"
-            >
-              Documentation
-            </Button>
-          </Box>
         </Stack>
       </Scrollbar>
     </Drawer>

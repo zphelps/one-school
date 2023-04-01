@@ -65,13 +65,13 @@ export const createTypography = (): TypographyOptions => {
     h5: {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
-      fontSize: '1.5rem',
+      fontSize: '1.3rem',
       lineHeight: 1.2
     },
     h6: {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
-      fontSize: '1.125rem',
+      fontSize: '1.2rem',
       lineHeight: 1.2
     }
   };
