@@ -28,9 +28,9 @@ export const EventHostCard: FC<EventHostCardProps> = (props) => {
             <img
                 src={group?.backgroundImageURL ?? Background}
                 alt="alumnus background photo"
-                style={{ borderTopLeftRadius: '8px', borderTopRightRadius: '8px', objectFit: 'cover', width: '100%', height: '200px' }}
+                style={{ borderTopLeftRadius: '8px', borderTopRightRadius: '8px', objectFit: 'cover', width: '100%', height: '140px' }}
             />
-            <Box sx={{ mt: -10, pl: 2.5, pr: 1, pb: 2.5, left: '20px', top: "175px" }}>
+            <Box sx={{ mt: -9, pl: 2.5, pr: 1, pb: 2.5, left: '20px', top: "175px" }}>
                 <img
                     src={group?.profileImageURL ?? Profile}
                     alt="alumnus profile photo"

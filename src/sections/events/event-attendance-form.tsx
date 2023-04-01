@@ -13,54 +13,57 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
     const auth = useAuth();
     const {event} = props;
     const {updateDocument, response} = useFirestore("events");
-    const [attendance, setAttendance] = useState<"attending" | "maybe" | "notAttending">();
+    const [attendance, setAttendance] = useState("");
 
     useEffect(() => {
         if (event?.attendance.attending.includes(auth.user?.id as string)) {
-            setAttendance("attending");
+            setAttendance('attending');
         } else if (event?.attendance.maybe.includes(auth.user?.id as string)) {
             setAttendance("maybe");
         } else if (event?.attendance.notAttending.includes(auth.user?.id as string)) {
             setAttendance("notAttending");
+        } else {
+            setAttendance("")
         }
-    }, [event])
+    }, [response])
 
-    const handleAttendanceUpdate = useCallback(
-        async (newAttendanceStatus: any): Promise<void> => {
-            if (!event) {
-                return;
+    const handleAttendanceUpdate = async (newAttendanceStatus: string) => {
+        if (!event) {
+            return;
+        }
+
+        await updateDocument(event.id, {
+            attendance: {
+                attending: attendance === "attending"
+                    ? event.attendance.attending.filter(id => id !== auth.user?.id)
+                    : newAttendanceStatus == "attending"
+                        ? [...event.attendance.attending, auth.user?.id as string]
+                        : [...event?.attendance.attending],
+                maybe: attendance === "maybe"
+                    ? event.attendance.maybe.filter(id => id !== auth.user?.id)
+                    : newAttendanceStatus == "maybe"
+                        ? [...event.attendance.maybe, auth.user?.id as string]
+                        : [...event?.attendance.maybe],
+                notAttending: attendance === "notAttending"
+                    ? event.attendance.notAttending.filter(id => id !== auth.user?.id)
+                    : newAttendanceStatus == "notAttending"
+                        ? [...event.attendance.notAttending, auth.user?.id as string]
+                        : [...event?.attendance.notAttending],
             }
-            console.log("newAttendanceStatus", newAttendanceStatus)
-            console.log(event.id)
-            await updateDocument(event.id, {
-                attendance: {
-                    attending: attendance === "attending"
-                        ? event.attendance.attending.filter(id => id !== auth.user?.id)
-                        : [...event.attendance.attending, auth.user?.id as string],
-                    maybe: attendance === "maybe"
-                        ? event.attendance.maybe.filter(id => id !== auth.user?.id)
-                        : [...event.attendance.maybe, auth.user?.id as string],
-                    notAttending: attendance === "notAttending"
-                        ? event.attendance.notAttending.filter(id => id !== auth.user?.id)
-                        : [...event.attendance.notAttending, auth.user?.id as string],
-                }
-            })
-            console.log(response)
-            setAttendance(newAttendanceStatus)
-        },
-        [event]
-    );
-    
+        })
+    }
+
     return (
         <ButtonGroup
             variant="outlined"
             aria-label="outlined button group"
+            disabled={response.isPending}
         >
             <Button
                 onClick={() => handleAttendanceUpdate("attending")}
                 sx={{
                     borderRadius: "8px",
-                    height: "35px"
+                    height: "32px"
                 }}
                 variant={event?.attendance.attending.includes(auth.user?.id as string) ? "contained" : "outlined"}
             >
@@ -71,7 +74,7 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
                 variant={event?.attendance.maybe.includes(auth.user?.id as string) ? "contained" : "outlined"}
                 sx={{
                     borderRadius: "8px",
-                    height: "35px"
+                    height: "32px"
                 }}
             >
                 Maybe
@@ -81,7 +84,7 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
                 variant={event?.attendance.notAttending.includes(auth.user?.id as string) ? "contained" : "outlined"}
                 sx={{
                     borderRadius: "8px",
-                    height: "35px"
+                    height: "32px"
                 }}
             >
                 Not Going

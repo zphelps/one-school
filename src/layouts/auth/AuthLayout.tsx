@@ -5,6 +5,7 @@ import {styled} from "@mui/material/styles";
 // import { Logo } from 'src/components/logo';
 import {RouterLink} from "../../components/router-link";
 import {paths} from "../../paths";
+import Logo from '../../assets/Logo.png'
 
 const TOP_NAV_HEIGHT: number = 64;
 
@@ -55,7 +56,7 @@ export const AuthLayout: FC<LayoutProps> = (props) => {
                             spacing={1}
                             sx={{textDecoration: "none"}}
                         >
-                            <img style={{height: "40px", width: "35px"}} src="src/assets/Logo.PNG"></img>
+                            <img style={{height: "40px", width: "35px"}} src={Logo}></img>
                             <Typography
                                 variant="h5"
                                 sx={{

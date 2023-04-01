@@ -44,8 +44,8 @@ export const SplashScreen: FC = () => (
                         animation: 'rotation 1s infinite',
                         animationTimingFunction: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
                         transformOrigin: '40% 50%',
-                        height: "100px",
-                        width: "100px",
+                        height: "50px",
+                        width: "50px",
                         objectFit: "cover",
                     }}
                     src={Logo}

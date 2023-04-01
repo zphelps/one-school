@@ -52,11 +52,11 @@ export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {
                     </Paper>
                     <Stack direction="column">
                         <Typography
-                            variant="subtitle1"
+                            variant="subtitle2"
                             color={"lightslategray"}
                             fontWeight={"bold"}
                             sx={{
-                                pb: 0.75,
+                                pb: 0.6,
                             }}
                         >
                             {`${format(new Date(event?.start ?? 0), 'PPPP')}`.toUpperCase()}
@@ -64,7 +64,7 @@ export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {
                         <Typography
                             variant="h4"
                             component="div"
-                            sx={{mb: 1}}
+                            sx={{mb: 1.5}}
                             fontWeight={700}
                         >
                             {event?.title}
