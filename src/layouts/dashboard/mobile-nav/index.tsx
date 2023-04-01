@@ -12,6 +12,7 @@ import type { NavColor } from '../../../types/settings';
 import type { Section } from '../config';
 import { TenantSwitch } from '../tenant-switch';
 import { MobileNavSection } from './mobile-nav-section';
+import Logo from '../../../assets/Logo.png';
 
 const MOBILE_NAV_WIDTH: number = 280;
 
@@ -151,7 +152,7 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
             spacing={2}
             sx={{ p: 3 }}
           >
-            <img style={{height: '40px', width: '35px'}} src="src/assets/Logo.PNG"></img>
+            <img style={{height: '40px', width: '35px'}} src={Logo}></img>
             <Typography
                 variant="h5"
                 sx={{fontFamily: (theme) => theme.typography.fontFamily,

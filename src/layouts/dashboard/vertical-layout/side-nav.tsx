@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import File04Icon from '@untitled-ui/icons-react/build/esm/File04';
 import {Box, Button, Divider, Drawer, Stack, SvgIcon, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-// import { Logo } from 'src/components/logo';
-import { RouterLink } from '../../../components/router-link';
 import { Scrollbar } from '../../../components/scrollbar';
 import { usePathname } from '../../../hooks/use-pathname';
 import { paths } from '../../../paths';
@@ -13,6 +11,7 @@ import type { NavColor } from '../../../types/settings';
 import type { Section } from '../config';
 import { TenantSwitch } from '../tenant-switch';
 import { SideNavSection } from './side-nav-section';
+import Logo from "../../../assets/Logo.png";
 
 const SIDE_NAV_WIDTH: number = 280;
 
@@ -192,7 +191,7 @@ export const SideNav: FC<SideNavProps> = (props) => {
             spacing={2}
             sx={{ pt: 3, px: 2.5 }}
           >
-            <img style={{height: '40px', width: '35px'}} src="src/assets/Logo.PNG"></img>
+            <img style={{height: '40px', width: '35px'}} src={Logo}></img>
             <Typography
                 variant="h5"
                 sx={{fontFamily: (theme) => theme.typography.fontFamily,

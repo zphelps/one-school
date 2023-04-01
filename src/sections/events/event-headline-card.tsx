@@ -3,6 +3,7 @@ import {Box, Paper, Stack, Typography, useTheme} from "@mui/material";
 import {CalendarEvent} from "../../types/calendar";
 import {FC} from "react";
 import {format} from "date-fns";
+import {EventAttendanceForm} from "./event-attendance-form";
 
 interface EventHeadlineCardProps {
     event?: CalendarEvent;
@@ -63,10 +64,12 @@ export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {
                         <Typography
                             variant="h4"
                             component="div"
+                            sx={{mb: 1}}
                             fontWeight={700}
                         >
                             {event?.title}
                         </Typography>
+                        <EventAttendanceForm event={event} />
                     </Stack>
                 </Stack>
             </Box>

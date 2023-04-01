@@ -9,6 +9,7 @@ import {EventDetailsCard} from "../../sections/events/event-details-card";
 import {EventHeadlineCard} from "../../sections/events/event-headline-card";
 import {EventLocationCard} from "../../sections/events/event-location-card";
 import {EventHostCard} from "../../sections/events/event-host-card";
+import {EventAttendanceCard} from "../../sections/events/event-attendance-card";
 
 export const EventDetails = () => {
     const params = useParams<{ eventId: string }>()
@@ -22,7 +23,7 @@ export const EventDetails = () => {
     },[document])
 
     return (
-        <Container sx={{mt: 6}}>
+        <Container sx={{my: 4}}>
             {isPending && <Typography>Loading...</Typography>}
             {error && <Typography>Error: {error}</Typography>}
 
@@ -37,7 +38,10 @@ export const EventDetails = () => {
                     </Stack>
                 </Grid>
                 <Grid item xs={12} sm={12} md={5}>
-                    <EventHostCard groupID={event?.groupID}/>
+                    <Stack spacing={2}>
+                        {event.attendance && <EventAttendanceCard event={event}/>}
+                        <EventHostCard groupID={event?.groupID}/>
+                    </Stack>
                 </Grid>
             </Grid>}
         </Container>
