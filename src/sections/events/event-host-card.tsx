@@ -1,6 +1,6 @@
 import 'react'
 
-import {Paper, Stack, Typography, Box} from "@mui/material";
+import {Paper, Stack, Typography, Box, Card} from "@mui/material";
 import React, {FC, useEffect, useState} from "react";
 import {CalendarEvent} from "../../types/calendar";
 import {useDocument} from "../../hooks/firebase/useDocument";
@@ -24,7 +24,7 @@ export const EventHostCard: FC<EventHostCardProps> = (props) => {
     }, [groupDoc])
 
     return (
-        <Paper variant='outlined' sx={{ mb: 2, borderRadius: '8px' }}>
+        <Card sx={{ mb: 2, borderRadius: '8px' }}>
             <img
                 src={group?.backgroundImageURL ?? Background}
                 alt="alumnus background photo"
@@ -76,6 +76,6 @@ export const EventHostCard: FC<EventHostCardProps> = (props) => {
                 </Stack>
 
             </Box>
-        </Paper>
+        </Card>
     )
 }

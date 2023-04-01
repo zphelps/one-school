@@ -94,7 +94,7 @@ export const SideNavItem: FC<SideNavItemProps> = (props) => {
             justifyContent: 'flex-start',
             pl: `${16 + offset}px`,
             pr: '16px',
-            py: '6px',
+            py: '12px',
             textAlign: 'left',
             width: '100%',
             ...(active && {
@@ -130,7 +130,7 @@ export const SideNavItem: FC<SideNavItemProps> = (props) => {
               color: 'var(--nav-item-color)',
               flexGrow: 1,
               fontFamily: (theme) => theme.typography.fontFamily,
-              fontSize: depth > 0 ? 13 : 14,
+              fontSize: depth > 0 ? 14 : 15,
               fontWeight: depth > 0 ? 500 : 600,
               lineHeight: '24px',
               whiteSpace: 'nowrap',
@@ -190,7 +190,7 @@ export const SideNavItem: FC<SideNavItemProps> = (props) => {
           justifyContent: 'flex-start',
           pl: `${16 + offset}px`,
           pr: '16px',
-          py: '6px',
+          py: '12px', //6px
           textAlign: 'left',
           width: '100%',
           ...(active && {
@@ -227,7 +227,7 @@ export const SideNavItem: FC<SideNavItemProps> = (props) => {
             color: 'var(--nav-item-color)',
             flexGrow: 1,
             fontFamily: (theme) => theme.typography.fontFamily,
-            fontSize: depth > 0 ? 13 : 14,
+            fontSize: depth > 0 ? 14 : 15,
             fontWeight: depth > 0 ? 500 : 600,
             lineHeight: '24px',
             whiteSpace: 'nowrap',

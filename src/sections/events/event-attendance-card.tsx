@@ -1,7 +1,7 @@
 import 'react'
 import {FC} from "react";
 import {CalendarEvent} from "../../types/calendar";
-import {Paper, Stack, Typography} from "@mui/material";
+import {Card, Paper, Stack, Typography} from "@mui/material";
 import {EventDetailsTiles} from "./event-details-tiles";
 
 interface EventAttendanceProps {
@@ -10,7 +10,7 @@ interface EventAttendanceProps {
 export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
     const {event} = props;
     return (
-        <Paper variant={"outlined"} sx={{p: 3}}>
+        <Card sx={{p: 3}}>
             <Stack>
                 <Typography variant={"h5"} sx={{pb:3}}>
                     Attendance
@@ -59,6 +59,6 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                     </Stack>
                 </Stack>
             </Stack>
-        </Paper>
+        </Card>
     );
 }

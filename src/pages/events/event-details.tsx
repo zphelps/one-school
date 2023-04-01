@@ -27,18 +27,18 @@ export const EventDetails = () => {
             {isPending && <Typography>Loading...</Typography>}
             {error && <Typography>Error: {error}</Typography>}
 
-            {event && <Grid container spacing={2} rowSpacing={2} justifyContent={"center"}>
+            {event && <Grid container spacing={3} rowSpacing={3} justifyContent={"center"}>
                 <Grid item xs={12} sm={12} md={12}>
                     <EventHeadlineCard event={event}/>
                 </Grid>
                 <Grid item xs={12} sm={12} md={7}>
-                    <Stack spacing={2}>
+                    <Stack spacing={3}>
                         <EventDetailsCard event={event}/>
                         <EventLocationCard event={event}/>
                     </Stack>
                 </Grid>
                 <Grid item xs={12} sm={12} md={5}>
-                    <Stack spacing={2}>
+                    <Stack spacing={3}>
                         {event.attendance && <EventAttendanceCard event={event}/>}
                         <EventHostCard groupID={event?.groupID}/>
                     </Stack>

@@ -1,4 +1,4 @@
-import {Avatar, Button, Paper, Stack, Typography} from "@mui/material";
+import {Avatar, Button, Card, Paper, Stack, Typography} from "@mui/material";
 import type {Post} from "../../types/post";
 import {formatDistanceToNowStrict} from "date-fns";
 
@@ -6,7 +6,7 @@ import {formatDistanceToNowStrict} from "date-fns";
 export const PostCard = ({post}) => {
 
     return (
-        <Paper sx={{my: 1, mx: {xs: 1, md: 3}, py: 2}} variant={"outlined"}>
+        <Card sx={{my: 1, mx: {xs: 1, md: 3}, px:1, py:3}}>
             <Stack direction="row" spacing={1.5} sx={{mx: 2}}>
                 <Avatar src={post.author?.imageURL}></Avatar>
                 <Stack>
@@ -36,6 +36,6 @@ export const PostCard = ({post}) => {
                 </Button>
             </Stack>
 
-        </Paper>
+        </Card>
     )
 }

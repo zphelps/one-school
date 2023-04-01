@@ -1,5 +1,5 @@
 import 'react'
-import {Box, Paper, Stack, Typography, useTheme} from "@mui/material";
+import {Box, Card, Paper, Stack, Typography, useTheme} from "@mui/material";
 import {CalendarEvent} from "../../types/calendar";
 import {FC} from "react";
 import {format} from "date-fns";
@@ -14,7 +14,7 @@ export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {
     const theme = useTheme();
 
     return (
-        <Paper variant="outlined" sx={{width: "100%"}}>
+        <Card sx={{width: "100%"}}>
             {event?.imageURL && <img
                 src={event.imageURL}
                 alt="event image"
@@ -26,7 +26,7 @@ export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {
                     height: "200px"
                 }}
             />}
-            <Box sx={{p:2, left: "20px", top: "175px"}}>
+            <Box sx={{p:3, left: "20px", top: "175px"}}>
                 <Stack direction="row" justifyContent="start" spacing={3}>
                     <Paper variant={"outlined"} sx={{py:2, px:2.5, alignItems: "center", justifyContent: "center"}}>
                         <Typography
@@ -73,6 +73,6 @@ export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {
                     </Stack>
                 </Stack>
             </Box>
-        </Paper>
+        </Card>
     )
 }
