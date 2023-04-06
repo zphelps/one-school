@@ -5,6 +5,8 @@ import {Layout as DashboardLayout} from '../layouts/dashboard';
 import {Home} from "../pages/home/home";
 import {EventsCalendar} from "../pages/calendar/calendar";
 import {EventDetails} from "../pages/events/event-details";
+import {Groups} from "../pages/groups/list";
+import {GroupProfile} from "../pages/groups/profile";
 
 export const dashboardRoutes: RouteObject[] = [
     {
@@ -53,8 +55,12 @@ export const dashboardRoutes: RouteObject[] = [
                 children: [
                     {
                         index: true,
-                        element: <div>Groups</div>
-                    }
+                        element: <Groups/>
+                    },
+                    {
+                        path: ':groupId',
+                        element: <GroupProfile />
+                    },
                 ]
             },
             {

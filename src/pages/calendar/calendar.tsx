@@ -16,8 +16,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
 import useCalendarEvents from "../../hooks/events/use-calendar-events";
 import { CalendarEventPreviewDialog } from '../../sections/calendar/calendar-event-preview-dialog';
+import { CreateCalendarEventDialog } from '../../sections/calendar/create-calendar-event-dialog';
 
-interface PreviewDialogData {
+export interface PreviewDialogData {
     eventId?: string;
 }
 
@@ -32,14 +33,14 @@ interface UpdateDialogData {
     eventId?: string;
 }
 
-const useEvents = (): CalendarEvent[] => {
+export const useEvents = (): CalendarEvent[] => {
     useCalendarEvents();
     // @ts-ignore
     const events = useSelector((state) => state.calendarEvents.data);
     return events;
 };
 
-const useCurrentEvent = (
+export const useCurrentEvent = (
     events: CalendarEvent[],
     dialogData?: UpdateDialogData
 ): CalendarEvent | undefined => {
@@ -223,6 +224,16 @@ export const EventsCalendar = () => {
     );
 
     // @ts-ignore
+    function handleEventMouseEnter(eventInfo) {
+        eventInfo.el.style.cursor = 'pointer';
+    }
+
+    // @ts-ignore
+    function handleEventMouseLeave(eventInfo) {
+        eventInfo.el.style.cursor = 'default';
+    }
+
+    // @ts-ignore
     return (
         <>
             <Seo title="Calendar | OneSchool" />
@@ -230,7 +241,7 @@ export const EventsCalendar = () => {
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    py: 8
+                    py: 2
                 }}
             >
                 <Container maxWidth="xl">
@@ -247,16 +258,18 @@ export const EventsCalendar = () => {
                         <Card>
                             <CalendarContainer>
                                 <Calendar
+                                    eventMouseEnter={handleEventMouseEnter}
+                                    eventMouseLeave={handleEventMouseLeave}
                                     allDayMaintainDuration
-                                    dayMaxEventRows={4}
+                                    dayMaxEventRows={8}
                                     eventClick={handleEventSelect}
-                                    eventDisplay="block"
+                                    eventDisplay={'auto'}
                                     eventDrop={handleEventDrop}
                                     eventResizableFromStart
                                     eventResize={handleEventResize}
                                     events={events}
                                     headerToolbar={false}
-                                    height={"80vh"}
+                                    height={"90vh"}
                                     initialDate={date}
                                     initialView={view}
                                     plugins={[
@@ -268,8 +281,8 @@ export const EventsCalendar = () => {
                                     ]}
                                     ref={calendarRef}
                                     rerenderDelay={10}
-                                    select={handleRangeSelect}
-                                    selectable
+                                    // select={handleRangeSelect}
+                                    // selectable
                                     weekends
                                 />
                             </CalendarContainer>
@@ -282,14 +295,13 @@ export const EventsCalendar = () => {
                 onClose={previewDialog.handleClose}
                 open={previewDialog.open}
             />
-            {/*<CalendarEventDialog*/}
-            {/*    action="create"*/}
-            {/*    onAddComplete={createDialog.handleClose}*/}
-            {/*    onClose={createDialog.handleClose}*/}
-            {/*    open={createDialog.open}*/}
-            {/*    range={createDialog.data?.range}*/}
-            {/*/>*/}
-            {/*<CalendarEventDialog*/}
+            <CreateCalendarEventDialog
+                action="create"
+                onAddComplete={createDialog.handleClose}
+                onClose={createDialog.handleClose}
+                open={createDialog.open}
+            />
+            {/*<CreateCalendarEventDialog*/}
             {/*    action="update"*/}
             {/*    event={updatingEvent}*/}
             {/*    onClose={updateDialog.handleClose}*/}

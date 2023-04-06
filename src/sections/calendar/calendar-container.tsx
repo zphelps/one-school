@@ -8,14 +8,14 @@ export const CalendarContainer = styled('div')(
     '& .fc': {
       '--fc-bg-event-opacity': 1,
       '--fc-border-color': theme.palette.divider,
-      '--fc-daygrid-event-dot-width': '10px',
+      '--fc-daygrid-event-dot-width': '8px',
       '--fc-event-bg-color': theme.palette.primary.main,
       '--fc-event-border-color': theme.palette.primary.main,
       '--fc-event-text-color': theme.palette.primary.contrastText,
       '--fc-list-event-hover-bg-color': theme.palette.background.default,
       '--fc-neutral-bg-color': theme.palette.background.default,
       '--fc-page-bg-color': theme.palette.background.default,
-      '--fc-today-bg-color': alpha(theme.palette.primary.main, 0.25),
+      '--fc-today-bg-color': alpha(theme.palette.primary.main, 0.15),
       color: theme.palette.text.primary,
       fontFamily: theme.typography.fontFamily
     },
@@ -33,7 +33,7 @@ export const CalendarContainer = styled('div')(
     },
     '& .fc-daygrid-event': {
       borderRadius: theme.shape.borderRadius,
-      padding: '0px 4px',
+      padding: '0px 0px',
       fontSize: theme.typography.subtitle2.fontSize,
       fontWeight: theme.typography.subtitle2.fontWeight,
       lineHeight: theme.typography.subtitle2.lineHeight
@@ -44,7 +44,7 @@ export const CalendarContainer = styled('div')(
       lineHeight: theme.typography.body2.lineHeight
     },
     '& .fc-daygrid-day-frame': {
-      padding: '12px'
+      padding: '3px'
     },
     '& .fc-scrollgrid': {
       borderColor: 'transparent'

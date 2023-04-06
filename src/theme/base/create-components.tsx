@@ -201,6 +201,18 @@ export const createComponents = (): Components => {
         }
       }
     },
+    MuiAccordion: {
+        styleOverrides: {
+            root: {
+              border: '1px solid #E5E5E5',
+              backgroundColor: 'transparent',
+              borderRadius: 8,
+              borderStyle: 'solid',
+              borderWidth: 1,
+              overflow: 'hidden',
+            }
+        }
+    },
     MuiFilledInput: {
       styleOverrides: {
         root: {

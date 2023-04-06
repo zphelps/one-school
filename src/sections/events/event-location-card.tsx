@@ -11,7 +11,7 @@ export const EventLocationCard: FC<EventLocationProps> = (props) => {
     return (
         <Card>
             <Stack>
-                <img style={{maxHeight: "300px", objectFit: "cover"}} src={event?.location.mapImageURL}/>
+                {event?.location?.mapImageURL && <img style={{maxHeight: "300px", objectFit: "cover"}} src={event?.location?.mapImageURL!}/>}
                 <Stack sx={{px:3, pb: 3, pt:2}}>
                     <Typography variant={"subtitle1"}>{event?.location.name}</Typography>
                     <Typography>

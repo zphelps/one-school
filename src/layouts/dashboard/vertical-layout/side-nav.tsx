@@ -13,7 +13,7 @@ import { TenantSwitch } from '../tenant-switch';
 import { SideNavSection } from './side-nav-section';
 import Logo from "../../../assets/Logo.png";
 
-const SIDE_NAV_WIDTH: number = 280;
+const SIDE_NAV_WIDTH: number = 260;
 
 const useCssVars = (color: NavColor): Record<string, string> => {
   const theme = useTheme();

@@ -9,6 +9,9 @@ import {routes} from "./routes";
 import {Toaster} from "react-hot-toast";
 import {SettingsConsumer, SettingsProvider} from "./contexts/settings/settings-context";
 import {SplashScreen} from "./components/splash-screen";
+// import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 function App() {
 
@@ -56,7 +59,9 @@ function App() {
                                                     ? <SplashScreen />
                                                     : (
                                                         <>
-                                                            {element}
+                                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                                {element}
+                                                            </LocalizationProvider>
                                                         </>
                                                     )
                                             }

@@ -69,7 +69,7 @@ export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {
                         >
                             {event?.title}
                         </Typography>
-                        <EventAttendanceForm event={event} />
+                        {event?.attendance != null && <EventAttendanceForm event={event}/>}
                     </Stack>
                 </Stack>
             </Box>

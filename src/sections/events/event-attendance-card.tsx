@@ -21,7 +21,7 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                             variant={"h5"}
                             textAlign={"center"}
                         >
-                            {event?.attendance.attending.length}
+                            {event?.attendance?.attending.length}
                         </Typography>
                         <Typography
                             textAlign={"center"}
@@ -35,7 +35,7 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                             variant={"h5"}
                             textAlign={"center"}
                         >
-                            {event?.attendance.maybe.length}
+                            {event?.attendance?.maybe.length}
                         </Typography>
                         <Typography
                             textAlign={"center"}
@@ -49,7 +49,7 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                             variant={"h5"}
                             textAlign={"center"}
                         >
-                            {event?.attendance.notAttending.length}
+                            {event?.attendance?.notAttending.length}
                         </Typography>
                         <Typography
                             textAlign={"center"}

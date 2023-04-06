@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {collection, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {db} from "../../config";
-import {setMainFeedPosts, setMainFeedPostsStatus} from "../../slices/posts/main-feed";
 import {useAuth} from "../use-auth";
 import {Status} from "../../utils/status";
+import {setGroupFeedPosts, setGroupFeedPostsStatus} from "../../slices/posts/group-feed";
 
-const useMainFeedPosts = () => {
+const useGroupFeedPosts = (groupID: string) => {
     const dispatch = useDispatch();
     // @ts-ignore
     const status = useSelector((state) => state.mainFeed.status);
@@ -17,7 +17,7 @@ const useMainFeedPosts = () => {
         // @ts-ignore
         let ref = query(collection(db, "tenants", auth.user.tenantID, "posts"), orderBy("createdAt", "desc"));
 
-        ref = query(ref, where("targetIDs", "array-contains-any", auth.user?.targetMembership));
+        ref = query(ref, where("targetIDs", "array-contains", groupID));
 
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {
@@ -25,13 +25,12 @@ const useMainFeedPosts = () => {
                     id: doc.id,
                     ...doc.data(),
                 }));
-
-                dispatch(setMainFeedPosts(data));
-                dispatch(setMainFeedPostsStatus(Status.SUCCESS));
+                dispatch(setGroupFeedPosts(data));
+                dispatch(setGroupFeedPostsStatus(Status.SUCCESS));
             },
             (error) => {
                 console.error("Error listening to Firestore changes:", error);
-                dispatch(setMainFeedPostsStatus(Status.ERROR));
+                dispatch(setGroupFeedPostsStatus(Status.ERROR));
             }
         );
 
@@ -43,4 +42,4 @@ const useMainFeedPosts = () => {
     return { status };
 };
 
-export default useMainFeedPosts;
+export default useGroupFeedPosts;

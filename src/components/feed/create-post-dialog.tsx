@@ -28,13 +28,11 @@ import {useCollection} from "../../hooks/firebase/useCollection";
 import {functions} from "../../config";
 import { httpsCallable } from 'firebase/functions';
 import { enumToArray } from '../../utils/enum';
+import {Visibility} from "../../utils/visibility";
+import {values} from "lodash";
 
-enum Visibility {
-    PUBLIC = 'Anyone',
-    MEMBERS_ONLY = 'Members Only',
-}
 interface Values {
-    id: string;
+    id: string | null;
     createdAt: Date | null;
     likeCount: number;
     commentCount: number;
@@ -98,7 +96,7 @@ const useInitialValues = (
             }
 
             return {
-                id: uuidv4(),
+                id: null,
                 createdAt: null,
                 likeCount: 0,
                 author: {
@@ -166,7 +164,7 @@ export const PostDialog: FC<PostDialogProps> = (props) => {
         onSubmit: async (values, helpers): Promise<void> => {
             try {
                 const data = {
-                    id: values.id,
+                    id: values.id ?? uuidv4(),
                     createdAt: values.createdAt ?? new Date(),
                     likeCount: values.likeCount,
                     commentCount: values.commentCount,
@@ -176,8 +174,8 @@ export const PostDialog: FC<PostDialogProps> = (props) => {
                     pollID: values.pollID,
                     imageURLS: values.imageURLS,
                     videoURL: values.videoURL,
-                    targetIDs: values.targetIDs,
-                    public: values.visibility == Visibility.MEMBERS_ONLY ? false : true,
+                    targetIDs: [...values.targetIDs, values.group?.id],
+                    public: values.visibility != Visibility.MEMBERS_ONLY,
                     text: values.text,
                     author: {
                         id: auth.user?.id,

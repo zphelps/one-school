@@ -10,7 +10,7 @@ import { SideNav } from './side-nav';
 import { TopNav } from './top-nav';
 import { useMobileNav } from './use-mobile-nav';
 
-const SIDE_NAV_WIDTH: number = 280;
+const SIDE_NAV_WIDTH: number = 260;
 
 const VerticalLayoutRoot = styled('div')(
   ({ theme }) => ({
