@@ -9,15 +9,17 @@ import {setGroupFeedPosts, setGroupFeedPostsStatus} from "../../slices/posts/gro
 const useGroupFeedPosts = (groupID: string) => {
     const dispatch = useDispatch();
     // @ts-ignore
-    const status = useSelector((state) => state.mainFeed.status);
+    const status = useSelector((state) => state.groupFeed.status);
 
     const auth = useAuth();
 
     useEffect(() => {
         // @ts-ignore
-        let ref = query(collection(db, "tenants", auth.user.tenantID, "posts"), orderBy("createdAt", "desc"));
+        let ref = query(collection(db, "tenants", auth.user.tenantID, "groups", groupID, "posts"), orderBy("createdAt", "desc"));
 
-        ref = query(ref, where("targetIDs", "array-contains", groupID));
+        if (!auth.user?.targetMembership.includes(groupID)) {
+            ref = query(ref, where("public", "==", true));
+        }
 
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {

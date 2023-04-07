@@ -1,16 +1,15 @@
-import {useEffect, useMemo} from "react";
+import {useMemo} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {collection, onSnapshot, orderBy, query, where} from "firebase/firestore";
+import {collection, onSnapshot, query, where} from "firebase/firestore";
 import {db} from "../../config";
 import {useAuth} from "../use-auth";
 import {Status} from "../../utils/status";
-import {setCalendarEvents, setCalendarEventsStatus} from "../../slices/events/calendar-events";
-import {CalendarEvent} from "../../types/calendar";
+import {setGroupEvents, setGroupEventsStatus} from "../../slices/events/group-events";
 
-const useCalendarEvents = (start?: number, end?: number) => {
+const useGroupEvents = (groupID: string, start?: number, end?: number) => {
     const dispatch = useDispatch();
     // @ts-ignore
-    const status = useSelector((state) => state.calendarEvents.status);
+    const status = useSelector((state) => state.groupEvents.status);
 
     const auth = useAuth();
 
@@ -19,6 +18,9 @@ const useCalendarEvents = (start?: number, end?: number) => {
         let ref = collection(db, "tenants", auth.user.tenantID, "events");
         // @ts-ignore
         ref = query(ref, where("targetIDs", "array-contains-any", auth.user?.targetMembership));
+
+        // @ts-ignore
+        ref = query(ref, where("group.id", "==", groupID));
 
         if (start && end) {
             // @ts-ignore
@@ -34,12 +36,12 @@ const useCalendarEvents = (start?: number, end?: number) => {
                     ...doc.data(),
                 }));
 
-                dispatch(setCalendarEvents(data));
-                dispatch(setCalendarEventsStatus(Status.SUCCESS));
+                dispatch(setGroupEvents(data));
+                dispatch(setGroupEventsStatus(Status.SUCCESS));
             },
             (error) => {
                 console.error("Error listening to Firestore changes:", error);
-                dispatch(setCalendarEventsStatus(Status.ERROR));
+                dispatch(setGroupEventsStatus(Status.ERROR));
             }
         );
 
@@ -51,4 +53,4 @@ const useCalendarEvents = (start?: number, end?: number) => {
     return { status };
 };
 
-export default useCalendarEvents;
+export default useGroupEvents;

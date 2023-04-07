@@ -34,7 +34,7 @@ interface UpdateDialogData {
 }
 
 export const useEvents = (): CalendarEvent[] => {
-    useCalendarEvents();
+    useCalendarEvents(undefined, undefined);
     // @ts-ignore
     const events = useSelector((state) => state.calendarEvents.data);
     return events;
@@ -59,7 +59,11 @@ export const useCurrentEvent = (
 export const EventsCalendar = () => {
     const dispatch = useDispatch();
     const calendarRef = useRef<Calendar | null>(null);
-    const events = useEvents();
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [endDate, setEndDate] = useState<Date>(new Date());
+    // const events = useEvents();
+    // @ts-ignore
+    const events = useSelector((state) => state.calendarEvents.data);
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
     const [date, setDate] = useState<Date>(new Date());
     const [view, setView] = useState<CalendarView>(mdUp ? 'timeGridDay' : 'dayGridMonth');
@@ -67,6 +71,8 @@ export const EventsCalendar = () => {
     const createDialog = useDialog<CreateDialogData>();
     const updateDialog = useDialog<UpdateDialogData>();
     const updatingEvent = useCurrentEvent(events, previewDialog.data);
+
+    useCalendarEvents(startDate.getTime(), endDate.getTime());
 
     const handleScreenResize = useCallback(
         (): void => {
@@ -145,6 +151,13 @@ export const EventsCalendar = () => {
             }
         },
         []
+    );
+
+    const handleDatesSet = useCallback(
+        (arg: { start: Date; end: Date }): void => {
+            setStartDate(arg.start);
+            setEndDate(arg.end);
+        },[]
     );
 
     const handleAddClick = useCallback(
@@ -258,6 +271,7 @@ export const EventsCalendar = () => {
                         <Card>
                             <CalendarContainer>
                                 <Calendar
+                                    datesSet={handleDatesSet}
                                     eventMouseEnter={handleEventMouseEnter}
                                     eventMouseLeave={handleEventMouseLeave}
                                     allDayMaintainDuration

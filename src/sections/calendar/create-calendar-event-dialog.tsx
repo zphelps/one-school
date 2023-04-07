@@ -223,7 +223,7 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                     id: values.id,
                     group: values.group,
                     location: values.location,
-                    targetIDs: values.targetIDs,
+                    targetIDs: [...values.targetIDs, values.group?.id],
                     public: values.visibility != Visibility.MEMBERS_ONLY,
                     attendance: values.attendance,
                     imageURL: values.imageURL,

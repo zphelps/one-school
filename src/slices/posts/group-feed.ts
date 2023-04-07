@@ -9,6 +9,7 @@ const groupFeedSlice = createSlice({
     },
     reducers: {
         setGroupFeedPosts: (state, action) => {
+            if(action.payload.length === 0) return;
             const groupID = action.payload[0].group.id;
             state.data = {
                 ...state.data,

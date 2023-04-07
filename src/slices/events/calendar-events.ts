@@ -1,15 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {Status} from "../../utils/status";
+import {CalendarEvent} from "../../types/calendar";
 
 const calendarEvents = createSlice({
     name: "eventsSlice",
     initialState: {
-        data: {},
+        data: [],
         status: Status.IDLE,
     },
     reducers: {
         setCalendarEvents: (state, action) => {
-            state.data = action.payload;
+
+            const uniqueIds = new Set<string>();
+
+            state.data = state.data.concat(action.payload).filter((event: CalendarEvent) => {
+                if (!uniqueIds.has(event.id)) {
+                    uniqueIds.add(event.id);
+                    return true;
+                }
+                return false;
+            });
         },
         setCalendarEventsStatus: (state, action) => {
             state.status = action.payload;

@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import File04Icon from '@untitled-ui/icons-react/build/esm/File04';
-import { Box, Button, Drawer, Stack, SvgIcon, Typography } from '@mui/material';
+import {Box, Button, Divider, Drawer, Stack, SvgIcon, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { RouterLink } from '../../../components/router-link';
 import { Scrollbar } from '../../../components/scrollbar';
@@ -149,10 +149,10 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
           <Stack
             alignItems="center"
             direction="row"
-            spacing={2}
-            sx={{ p: 3 }}
+            spacing={1.5}
+            sx={{ pt: 3, px: 4}}
           >
-            <img style={{height: '40px', width: '35px'}} src={Logo}></img>
+            <img style={{height: '38px', width: '35px'}} src={Logo}></img>
             <Typography
                 variant="h5"
                 sx={{fontFamily: (theme) => theme.typography.fontFamily,
@@ -161,6 +161,7 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
               OneSchool
             </Typography>
           </Stack>
+          <Divider sx={{ height: 2, mt: 3, mb: 2.5, background: (theme) => theme.palette.grey.A200 }} />
           <Stack
             component="nav"
             spacing={2}

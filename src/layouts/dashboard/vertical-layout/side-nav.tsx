@@ -188,12 +188,12 @@ export const SideNav: FC<SideNavProps> = (props) => {
           <Stack
             alignItems="center"
             direction="row"
-            spacing={2}
-            sx={{ pt: 3, px: 2.5 }}
+            spacing={1.5}
+            sx={{ pt: 3, px: 4}}
           >
-            <img style={{height: '40px', width: '35px'}} src={Logo}></img>
+            <img style={{height: '38px', width: '35px'}} src={Logo}></img>
             <Typography
-                variant="h5"
+                variant="h6"
                 sx={{fontFamily: (theme) => theme.typography.fontFamily,
                   color: (theme) => theme.palette.text.secondary}}
             >

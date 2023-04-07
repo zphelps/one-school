@@ -6,7 +6,7 @@ import {formatDistanceToNowStrict} from "date-fns";
 export const PostCard = ({post}) => {
 
     return (
-        <Card sx={{my: 2, mx: {xs: 1, md: 3}, px:1, py:3}} >
+        <Card sx={{mb: 2, mx: {xs: 1, md: 3}, px:1, py:3}} >
             <Stack direction="row" spacing={1.5} sx={{mx: 2}}>
                 <Avatar src={post.author?.imageURL}></Avatar>
                 <Stack>

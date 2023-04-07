@@ -10,7 +10,7 @@ import {
     Button,
     Container,
     Divider,
-    Grid,
+    Grid, Hidden,
     IconButton,
     Stack,
     SvgIcon,
@@ -20,17 +20,13 @@ import {
     Typography
 } from "@mui/material";
 import {blueGrey} from "@mui/material/colors";
-import {useMounted} from "../../hooks/use-mounted";
-import {Post} from "../../types/post";
 import {Seo} from "../../components/seo";
-import {RouterLink} from "../../components/router-link";
-import {paths} from "../../paths";
 import {useDocument} from "../../hooks/firebase/useDocument";
-import {CalendarEvent} from "../../types/calendar";
 import {Link, useParams} from "react-router-dom";
 import {Group} from "../../types/group";
 import {LockUnlocked01} from "@untitled-ui/icons-react";
 import {GroupPostsList} from "../../sections/groups/group-posts-list";
+import {MiniCalendar} from "../../sections/calendar/mini-calendar";
 
 const tabs = [
     {label: "Home", value: "home"},
@@ -42,100 +38,13 @@ const tabs = [
     {label: "Media", value: "media"},
 ];
 
-// const useProfile = (): Profile | null => {
-//   const isMounted = useMounted();
-//   const [profile, setProfile] = useState<Profile | null>(null);
-//
-//   const handleProfileGet = useCallback(async () => {
-//     try {
-//       const response = await socialApi.getProfile();
-//
-//       if (isMounted()) {
-//         setProfile(response);
-//       }
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   }, [isMounted]);
-//
-//   useEffect(
-//     () => {
-//       handleProfileGet();
-//     },
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//     []
-//   );
-//
-//   return profile;
-// };
-
-// const usePosts = (): Post[] => {
-//   const isMounted = useMounted();
-//   const [posts, setPosts] = useState<Post[]>([]);
-//
-//   const handlePostsGet = useCallback(
-//     async () => {
-//       try {
-//         const response = await socialApi.getPosts();
-//
-//         if (isMounted()) {
-//           setPosts(response);
-//         }
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     },
-//     [isMounted]
-//   );
-//
-//   useEffect(
-//     () => {
-//       handlePostsGet();
-//     },
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//     []
-//   );
-//
-//   return posts;
-// };
-//
-// const useConnections = (search: string = ''): Connection[] => {
-//   const [connections, setConnections] = useState<Connection[]>([]);
-//   const isMounted = useMounted();
-//
-//   const handleConnectionsGet = useCallback(
-//     async () => {
-//       const response = await socialApi.getConnections();
-//
-//       if (isMounted()) {
-//         setConnections(response);
-//       }
-//     },
-//     [isMounted]
-//   );
-//
-//   useEffect(
-//     () => {
-//       handleConnectionsGet();
-//     },
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//     [search]
-//   );
-//
-//   return connections.filter((connection) => {
-//     return connection.name?.toLowerCase().includes(search);
-//   });
-// };
-
 export const GroupProfile = () => {
     const params = useParams();
     const {document, error, isPending} = useDocument("groups", params.groupId!);
     const [group, setGroup] = useState<Group>();
     const [currentTab, setCurrentTab] = useState<string>("home");
     const [status, setStatus] = useState<string>("not_connected");
-    // const posts = usePosts();
     const [connectionsQuery, setConnectionsQuery] = useState<string>("");
-    // const connections = useConnections(connectionsQuery);
 
     useEffect(() => {
         if (document) {
@@ -390,7 +299,18 @@ export const GroupProfile = () => {
                     <Divider/>
                     <Box sx={{mt: 3}}>
                         {currentTab === 'home' && (
-                          <GroupPostsList groupId={params.groupId!} />
+                            <Grid container spacing={2} justifyContent={'center'}>
+                                <Grid item xs={12} sm={12} md={7} lg={7}>
+                                    <GroupPostsList groupId={params.groupId!} />
+                                </Grid>
+                                <Hidden mdDown>
+                                    <Grid item xs={0} sm={0} md={5} lg={4}>
+                                        <MiniCalendar groupID={params.groupId!}/>
+                                    </Grid>
+                                </Hidden>
+
+                            </Grid>
+
                         )}
                         {/*{currentTab === 'connections' && (*/}
                         {/*  <SocialConnections*/}
