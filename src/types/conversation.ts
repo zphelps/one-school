@@ -24,9 +24,9 @@ export interface Participant {
 
 export interface Thread {
   id?: string;
-  messages: Message[];
   participantIds: string[];
   participants?: Participant[];
   type: 'ONE_TO_ONE' | 'GROUP';
   unreadCount?: number;
+  lastMessage?: Message;
 }

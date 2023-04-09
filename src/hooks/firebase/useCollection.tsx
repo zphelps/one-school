@@ -30,7 +30,7 @@ export const useCollection = (_collection: any, _queries: any[], _orderBy: any[]
                 ref = collection(ref, _collection);
             }
 
-            if (_queries) {
+            if (_queries.length > 0 && _queries[0].length > 0) {
                 // @ts-ignore
                 ref = query(ref, where(..._queries))
             }

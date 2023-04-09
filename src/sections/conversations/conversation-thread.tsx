@@ -1,23 +1,18 @@
-import type {FC, MutableRefObject} from "react";
-import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
+import type {FC} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import PropTypes from "prop-types";
-import type SimpleBarCore from "simplebar-core";
 import {Box, Divider, Stack} from "@mui/material";
-import {Participant, Thread} from "../../types/conversation";
-import {useRouter} from "../../hooks/use-router";
-import {paths} from "../../paths";
 import {useAuth} from "../../hooks/use-auth";
-import {Scrollbar} from "../../components/scrollbar";
 import {ConversationMessageAdd} from "./conversation-message-add";
 import {ConversationThreadToolbar} from "./conversation-thread-toolbar";
 import {ConversationMessages} from "./conversation-messages";
 import useThread from "../../hooks/conversations/use-thread";
 import {useDispatch, useSelector} from "react-redux";
-import {addMessage, setCurrentThread} from "../../slices/conversations/conversations";
+import {addMessage} from "../../slices/conversations/conversations";
 import {httpsCallable} from "firebase/functions";
 import {functions} from "../../config";
-import toast from "react-hot-toast";
 import { v4 as uuidv4 } from 'uuid';
+import useThreadMessages from "../../hooks/conversations/use-thread-messages";
 
 interface ConversationThreadProps {
     threadKey: string;
@@ -35,7 +30,15 @@ export const ConversationThread: FC<ConversationThreadProps> = (props) => {
         return threads.byId[currentThreadId as string];
     });
 
+    const messages = useSelector((state) => {
+        // @ts-ignore
+        const {threadMessages, currentThreadId} = state.conversations;
+        return threadMessages.byId[currentThreadId as string];
+    })
+
     useThread(threadKey);
+
+    useThreadMessages(threadKey)
 
     const handleSend = useCallback(
         async (body: string): Promise<void> => {
@@ -57,7 +60,7 @@ export const ConversationThread: FC<ConversationThreadProps> = (props) => {
                         message
                     }));
                     const sendMessage = httpsCallable(functions, "sendMessage");
-                    await sendMessage({message: message, threadId: thread.id, tenantID: user?.tenantID});
+                    await sendMessage({message: message, thread: thread, tenantID: user?.tenantID});
                 } catch (err) {
                     console.error(err);
                 }
@@ -98,7 +101,7 @@ export const ConversationThread: FC<ConversationThreadProps> = (props) => {
                 }}
             >
                 <ConversationMessages
-                    messages={thread?.messages || []}
+                    messages={messages || []}
                     participants={thread?.participants || []}
                 />
             </Box>

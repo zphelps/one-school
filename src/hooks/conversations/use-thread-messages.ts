@@ -3,30 +3,31 @@ import {useSelector, useDispatch} from "react-redux";
 import {collection, onSnapshot, orderBy, query, where, doc} from "firebase/firestore";
 import {db} from "../../config";
 import {useAuth} from "../use-auth";
-import {getThread, getThreads, markThreadAsSeen, setCurrentThread} from "../../slices/conversations/conversations";
+import {
+    getThread,
+    getThreadMessages,
+    getThreads,
+    markThreadAsSeen,
+    setCurrentThread
+} from "../../slices/conversations/conversations";
 import {Thread} from "../../types/conversation";
 
-const useThread = (threadId: string) => {
+const useThreadMessages = (threadId: string) => {
     const dispatch = useDispatch();
 
     const auth = useAuth();
 
     useEffect(() => {
         // @ts-ignore
-        let threadRef = doc(db, "tenants", auth.user.tenantID, "threads", threadId);
-        // @ts-ignore
         let messagesRef = query(collection(db, "tenants", auth.user.tenantID, "threads", threadId, 'messages'), orderBy('createdAt', 'asc'));
 
-        const unsubscribeThread = onSnapshot(threadRef,
-            (doc) => {
-                if (!doc.exists()) return;
-
-                const thread = {
+        const unsubscribeMessages = onSnapshot(messagesRef,
+            (snapshot: { docs: any[]; }) => {
+                const data = snapshot.docs.map((doc) => ({
                     ...doc.data(),
-                }
+                }));
 
-                dispatch(getThread(thread as Thread));
-
+                dispatch(getThreadMessages({threadID: threadId, messages: data}));
             },
             (error) => {
                 console.error("Error listening to Firestore changes:", error);
@@ -38,11 +39,11 @@ const useThread = (threadId: string) => {
         dispatch(markThreadAsSeen(threadId))
 
         return () => {
-            unsubscribeThread();
+            unsubscribeMessages();
         };
     }, [dispatch, threadId]);
 
     return {};
 };
 
-export default useThread;
+export default useThreadMessages;

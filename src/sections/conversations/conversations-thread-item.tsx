@@ -7,7 +7,7 @@ import {customLocale} from "../../utils/date-locale";
 import {useAuth} from "../../hooks/use-auth";
 
 const getLastMessage = (thread: Thread): Message | undefined => {
-  return thread.messages?.[thread.messages.length - 1];
+  return thread.lastMessage;
 };
 
 const getRecipients = (participants: Participant[], userId: string): Participant[] => {

@@ -13,6 +13,10 @@ interface ConversationsState {
     byId: Record<string, Thread>;
     allIds: string[];
   };
+  threadMessages: {
+    byId: Record<string, Message[]>,
+    allIds: string[],
+  };
 }
 
 type GetUsersAction = PayloadAction<User[]>;
@@ -20,6 +24,8 @@ type GetUsersAction = PayloadAction<User[]>;
 type GetThreadsAction = PayloadAction<Thread[]>;
 
 type GetThreadAction = PayloadAction<Thread | null>;
+
+type GetThreadMessagesAction = PayloadAction<{ threadID: string, messages: Message[] | null }>;
 
 type MarkThreadAsSeenAction = PayloadAction<string>;
 
@@ -36,6 +42,10 @@ const initialState: ConversationsState = {
   threads: {
     byId: {},
     allIds: []
+  },
+  threadMessages: {
+    byId: {},
+    allIds: [],
   }
 };
 
@@ -55,11 +65,23 @@ const reducers = {
   getThread(state: ConversationsState, action: GetThreadAction): void {
     const thread = action.payload;
 
+
     if (thread) {
       state.threads.byId[thread.id!] = thread;
 
       if (!state.threads.allIds.includes(thread.id!)) {
         state.threads.allIds.unshift(thread.id!);
+      }
+    }
+  },
+  getThreadMessages(state: ConversationsState, action: GetThreadMessagesAction): void {
+    const {messages, threadID} = action.payload;
+
+    if (messages) {
+      state.threadMessages.byId[threadID] = messages;
+
+      if (!state.threadMessages.allIds.includes(threadID)) {
+        state.threadMessages.allIds.unshift(threadID);
       }
     }
   },
@@ -77,9 +99,11 @@ const reducers = {
   addMessage(state: ConversationsState, action: AddMessageAction): void {
     const { threadId, message } = action.payload;
     const thread = state.threads.byId[threadId];
+    const messages = state.threadMessages.byId[threadId];
 
     if (thread) {
-      thread.messages.push(message);
+      messages?.push(message);
+      thread.lastMessage = message;
     }
   }
 };
@@ -90,5 +114,5 @@ export const conversationsSlice = createSlice({
   reducers
 });
 
-export const { getThreads, getThread, setCurrentThread, markThreadAsSeen, addMessage } = conversationsSlice.actions;
+export const { getThreads, getThread, getThreadMessages, setCurrentThread, markThreadAsSeen, addMessage } = conversationsSlice.actions;
 export default conversationsSlice.reducer;

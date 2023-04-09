@@ -14,6 +14,8 @@ const useThreads = () => {
         // @ts-ignore
         let ref = query(collection(db, "tenants", auth.user.tenantID, "threads"), where("participantIds", "array-contains", auth.user.id));
 
+        ref = query(ref, orderBy(new FieldPath("lastMessage", "createdAt"), "desc"));
+
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {
                 const data = snapshot.docs.map((doc) => ({
