@@ -9,4 +9,12 @@ export interface Group {
     profileImageURL: string | null;
     isPrivate: boolean;
     creatorID: string;
+    createdOn: number;
+    creator: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        imageURL: string;
+    }
 }

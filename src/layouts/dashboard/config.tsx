@@ -79,7 +79,7 @@ export const useSections = () => {
             },
             {
               title: 'Conversations',
-              path: paths.conversations.index,
+              path: paths.conversations,
               icon: (
                 <SvgIcon fontSize="small">
                   <MessageChatSquareIcon />

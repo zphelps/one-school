@@ -113,6 +113,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
               targetMembership: user?.targetMembership,
               imageURL: user?.imageURL,
               phone: user?.phone,
+              isActive: user?.isActive,
             }
           }
         });

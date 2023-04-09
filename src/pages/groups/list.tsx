@@ -222,7 +222,7 @@ export const Groups = () => {
                         </Container>
                         <Divider/>
                         <Container maxWidth="xl" sx={{mt: 2}}>
-                            <Grid container spacing={2}>
+                            <Grid container spacing={2.5}>
                                 {groupsStore.groupsCount > 0 && groupsStore.groups.map((group) => (
                                     <Grid key={group.id} item xs={12} sm={6} md={4} lg={3} xl={3} >
                                         <GroupCard group={group}/>

@@ -14,19 +14,29 @@ const groupEvents = createSlice({
             if(action.payload.length === 0) return;
             const groupID = action.payload[0].group.id;
 
-            const uniqueIds = new Set<string>();
-
             // @ts-ignore
-            state.data = {
-                ...state.data,
-                // @ts-ignore
-                [groupID]: (state.data[groupID] ?? []).concat(action.payload).filter((event: CalendarEvent) => {
-                    if (!uniqueIds.has(event.id)) {
-                        uniqueIds.add(event.id);
-                        return true;
+            const groupEvents = state.data[groupID] as CalendarEvent[];
+
+            if(!groupEvents) {
+                state.data = {
+                    ...state.data,
+                    [groupID]: action.payload
+                }
+            } else {
+                // Create a hashmap of the updated events, using the event IDs as keys
+                const updatedEventsMap = new Map(action.payload.map((event: CalendarEvent) => [event.id, event]));
+
+                // Iterate through the old array of events
+                for (let i = 0; i < groupEvents.length; i++) {
+                    // Check if there's an updated version in the hashmap
+                    const updatedEvent = updatedEventsMap.get(groupEvents[i].id);
+
+                    // If there's an updated version, replace the old event with the updated one
+                    if (updatedEvent) {
+                        groupEvents[i] = updatedEvent as CalendarEvent;
                     }
-                    return false;
-                })
+
+                }
             }
         },
         setGroupEventsStatus: (state, action) => {

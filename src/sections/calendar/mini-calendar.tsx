@@ -36,8 +36,8 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
 
     const [date, setDate] = useState(dayjs().toDate())
     const navigate = useNavigate();
-    const [startDate, setStartDate] = useState<number>(new Date().getTime());
-    const [endDate, setEndDate] = useState<number>(new Date().getTime());
+    const [startDate, setStartDate] = useState<number>();
+    const [endDate, setEndDate] = useState<number>();
 
     let events: any;
     if(groupID) {
@@ -134,19 +134,20 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
 
     // @ts-ignore
     return (
-        <Card sx={{py: 2, maxWidth: '375px', minWidth: '375px'}}>
-            <Stack direction={"row"} justifyContent={'space-between'} alignItems={'center'}>
-                <Typography variant={"h6"} sx={{px: 3, pt:0.5}}>Events</Typography>
+        <Card sx={{py: 2, maxWidth: '375px'}}>
+            <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+                <Typography variant={"h6"} sx={{px: 3, pt: 0.5}}>Calendar</Typography>
                 <Button
                     size={"small"}
-                    sx={{mr:1.25}}
-                    onClick={() => navigate('/calendar')}
+                    sx={{mr: 1.25}}
+                    onClick={() => navigate("/calendar")}
                 >
                     View All
                 </Button>
             </Stack>
 
-            <Divider sx={{mt:1.85, mb: 0.25}}/>
+            <Divider sx={{mt: 1.85, mb: 0.25}}/>
+
             <DateCalendar
                 onMonthChange={handleViewChange}
                 sx={{maxWidth: {xs: '300px', md: '400px'}}}

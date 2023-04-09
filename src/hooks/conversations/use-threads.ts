@@ -3,19 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import {collection, onSnapshot, orderBy, query, where, FieldPath} from "firebase/firestore";
 import {db} from "../../config";
 import {useAuth} from "../use-auth";
-import {Status} from "../../utils/status";
-import {setGroups, setGroupsStatus} from "../../slices/groups/groups";
+import {getThreads} from "../../slices/conversations/conversations";
 
-const useGroups = () => {
+const useThreads = () => {
     const dispatch = useDispatch();
-    // @ts-ignore
-    const status = useSelector((state) => state.groups.status);
 
     const auth = useAuth();
 
     useEffect(() => {
         // @ts-ignore
-        let ref = query(collection(db, "tenants", auth.user.tenantID, "groups"), orderBy("name", "desc"));
+        let ref = query(collection(db, "tenants", auth.user.tenantID, "threads"), where("participantIds", "array-contains", auth.user.id));
 
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {
@@ -24,12 +21,10 @@ const useGroups = () => {
                     ...doc.data(),
                 }));
 
-                dispatch(setGroups(data));
-                dispatch(setGroupsStatus(Status.SUCCESS));
+                dispatch(getThreads(data));
             },
             (error) => {
                 console.error("Error listening to Firestore changes:", error);
-                dispatch(setGroupsStatus(Status.ERROR));
             }
         );
 
@@ -41,4 +36,4 @@ const useGroups = () => {
     return { status };
 };
 
-export default useGroups;
+export default useThreads;

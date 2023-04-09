@@ -7,6 +7,7 @@ import {EventsCalendar} from "../pages/calendar/calendar";
 import {EventDetails} from "../pages/events/event-details";
 import {Groups} from "../pages/groups/list";
 import {GroupProfile} from "../pages/groups/profile";
+import {Conversations} from "../pages/conversations/conversations";
 
 export const dashboardRoutes: RouteObject[] = [
     {
@@ -58,6 +59,10 @@ export const dashboardRoutes: RouteObject[] = [
                         element: <Groups/>
                     },
                     {
+                        path: ':groupId/:tab',
+                        element: <GroupProfile />
+                    },
+                    {
                         path: ':groupId',
                         element: <GroupProfile />
                     },
@@ -65,13 +70,17 @@ export const dashboardRoutes: RouteObject[] = [
             },
             {
                 path: 'conversations',
-                children: [
-                    {
-                        index: true,
-                        element: <div>Conversations</div>
-                    }
-                ]
+                element: <Conversations />
             },
+            // {
+            //     path: 'conversations',
+            //     children: [
+            //         {
+            //             index: true,
+            //             element: <div>Conversations</div>
+            //         }
+            //     ]
+            // },
             {
                 path: 'forms',
                 children: [

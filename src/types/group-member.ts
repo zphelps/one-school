@@ -1,16 +1,12 @@
-export interface User {
+export interface GroupMember {
     id: string;
-    tenantID: string;
     firstName: string;
     lastName: string;
     email: string;
     imageURL?: string;
     phone?: string;
     role: string;
-    targetMembership: string[];
-    fcmToken?: string;
-    isActive: boolean;
-    lastActivity?: number;
+    grade: number;
 
     [key: string]: any;
 }

@@ -1,6 +1,6 @@
 import {useMemo} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {collection, onSnapshot, query, where} from "firebase/firestore";
+import {collection, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {db} from "../../config";
 import {useAuth} from "../use-auth";
 import {Status} from "../../utils/status";
@@ -17,7 +17,7 @@ const useGroupEvents = (groupID: string, start?: number, end?: number) => {
         // @ts-ignore
         let ref = collection(db, "tenants", auth.user.tenantID, "events");
         // @ts-ignore
-        ref = query(ref, where("targetIDs", "array-contains-any", auth.user?.targetMembership));
+        ref = query(ref, where("targetIDs", "array-contains-any", auth.user?.targetMembership), orderBy("start", "asc"));
 
         // @ts-ignore
         ref = query(ref, where("group.id", "==", groupID));

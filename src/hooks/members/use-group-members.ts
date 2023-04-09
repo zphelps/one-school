@@ -1,35 +1,35 @@
-import {useEffect, useMemo} from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {collection, onSnapshot, orderBy, query, where, FieldPath} from "firebase/firestore";
+import {collection, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {db} from "../../config";
 import {useAuth} from "../use-auth";
 import {Status} from "../../utils/status";
-import {setGroups, setGroupsStatus} from "../../slices/groups/groups";
+import {setGroupMembers, setGroupMembersStatus} from "../../slices/members/group-members";
 
-const useGroups = () => {
+const useGroupMembers = (groupID: string) => {
     const dispatch = useDispatch();
     // @ts-ignore
-    const status = useSelector((state) => state.groups.status);
+    const status = useSelector((state) => state.groupFeed.status);
 
     const auth = useAuth();
 
     useEffect(() => {
         // @ts-ignore
-        let ref = query(collection(db, "tenants", auth.user.tenantID, "groups"), orderBy("name", "desc"));
+        let ref = query(collection(db, "tenants", auth.user.tenantID, "groups", groupID, "members"), orderBy("firstName", "desc"));
 
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {
                 const data = snapshot.docs.map((doc) => ({
+                    groupID: groupID,
                     id: doc.id,
                     ...doc.data(),
                 }));
-
-                dispatch(setGroups(data));
-                dispatch(setGroupsStatus(Status.SUCCESS));
+                dispatch(setGroupMembers(data));
+                dispatch(setGroupMembersStatus(Status.SUCCESS));
             },
             (error) => {
                 console.error("Error listening to Firestore changes:", error);
-                dispatch(setGroupsStatus(Status.ERROR));
+                dispatch(setGroupMembersStatus(Status.ERROR));
             }
         );
 
@@ -41,4 +41,4 @@ const useGroups = () => {
     return { status };
 };
 
-export default useGroups;
+export default useGroupMembers;

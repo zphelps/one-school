@@ -25,9 +25,10 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
         } else {
             setAttendance("")
         }
-    }, [response])
+    }, [response, event])
 
     const handleAttendanceUpdate = async (newAttendanceStatus: string) => {
+
         if (!event) {
             return;
         }
@@ -58,19 +59,24 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
             variant="outlined"
             aria-label="outlined button group"
             disabled={response.isPending}
+            className={"attendance-buttons"}
         >
             <Button
-                onClick={() => handleAttendanceUpdate("attending")}
+                onClick={async (e) => {
+                    await handleAttendanceUpdate("attending")
+                }}
                 sx={{
                     borderRadius: "8px",
-                    height: "32px"
+                    height: "32px",
                 }}
                 variant={event?.attendance?.attending.includes(auth.user?.id as string) ? "contained" : "outlined"}
             >
                 Going
             </Button>
             <Button
-                onClick={() => handleAttendanceUpdate("maybe")}
+                onClick={async (e) => {
+                    await handleAttendanceUpdate("maybe")
+                }}
                 variant={event?.attendance?.maybe.includes(auth.user?.id as string) ? "contained" : "outlined"}
                 sx={{
                     borderRadius: "8px",
@@ -80,7 +86,9 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
                 Maybe
             </Button>
             <Button
-                onClick={() => handleAttendanceUpdate("notAttending")}
+                onClick={async (e) => {
+                    await handleAttendanceUpdate("notAttending")
+                }}
                 variant={event?.attendance?.notAttending.includes(auth.user?.id as string) ? "contained" : "outlined"}
                 sx={{
                     borderRadius: "8px",

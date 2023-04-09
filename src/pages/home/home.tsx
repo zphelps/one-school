@@ -42,14 +42,14 @@ export const Home = () => {
             <Button onClick={handleAddClick}>New Post</Button>
             <Container maxWidth={'xl'}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={12} md={7} lg={7}>
+                    <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
                         {posts && (
                             posts.map((post: Post) => (
                                 <PostCard key={post.id} post={post}/>
                             ))
                         )}
                     </Grid>
-                    <Grid item xs={12} sm={12} md={5} lg={4}>
+                    <Grid item xs={12} sm={12} md={5} lg={5} xl={4}>
                         <MiniCalendar />
                     </Grid>
                 </Grid>

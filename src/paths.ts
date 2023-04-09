@@ -19,11 +19,7 @@ export const paths = {
     edit: '/groups/:groupId/edit',
     details: '/groups/:groupId'
   },
-  conversations: {
-    index: '/conversations',
-    create: '/conversations/create',
-    details: '/conversations/:conversationId'
-  },
+  conversations: '/conversations',
   forms: '/forms',
   payments: '/payments',
   files: '/files',

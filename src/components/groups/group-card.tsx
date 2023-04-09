@@ -4,6 +4,7 @@ import {Group} from "../../types/group";
 import {Avatar, Box, Card, Paper, Stack, styled, SvgIcon, Typography} from "@mui/material";
 import {LockUnlocked01} from "@untitled-ui/icons-react";
 import {Link, useNavigate} from "react-router-dom";
+import EventIcon from '@mui/icons-material/Event';
 
 interface GroupCardProps {
     group: Group;
@@ -11,6 +12,7 @@ interface GroupCardProps {
 
 const HoverGrowthCard = styled(Card)`
   transition: transform 0.3s;
+  padding-bottom: 10px;
   &:hover {
     transform: scale(1.025); /* Adjust the scale value for desired growth effect */
   }
@@ -43,7 +45,7 @@ export const GroupCard: FC<GroupCardProps> = (props) => {
                             height: '75px',
                             mt: '-70px',
                             border: '1px solid #E5E5E5',
-                            mb: 1.5,
+                            mb: 2,
                         }}
                         src={group.profileImageURL!}
                     />
@@ -75,6 +77,7 @@ export const GroupCard: FC<GroupCardProps> = (props) => {
                     </Box>
                     <Typography
                         variant={'h5'}
+                        sx={{mb: 0.5}}
                     >
                         {group.name}
                     </Typography>
@@ -97,6 +100,18 @@ export const GroupCard: FC<GroupCardProps> = (props) => {
                             {group.memberCount} {group.memberCount == 1 ? 'member' : 'members'}
                         </Typography>
                     </Stack>
+
+                    {/*<Stack direction={'row'} spacing={1}>*/}
+                    {/*    <Paper variant={'outlined'} sx={{width: '100%', alignItems:'center', justifyContent:'center'}}>*/}
+                    {/*        <EventIcon sx={{color: 'text.secondary'}}/>*/}
+                    {/*    </Paper>*/}
+                    {/*    <Paper variant={'outlined'} sx={{width: '100%'}}>*/}
+                    {/*        <EventIcon sx={{color: 'text.secondary'}}/>*/}
+                    {/*    </Paper>*/}
+                    {/*    <Paper variant={'outlined'} sx={{width: '100%'}}>*/}
+                    {/*        <EventIcon sx={{color: 'text.secondary'}}/>*/}
+                    {/*    </Paper>*/}
+                    {/*</Stack>*/}
 
                     {/*<Typography*/}
                     {/*    variant={'subtitle2'}*/}

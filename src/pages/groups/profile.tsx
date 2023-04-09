@@ -22,11 +22,16 @@ import {
 import {blueGrey} from "@mui/material/colors";
 import {Seo} from "../../components/seo";
 import {useDocument} from "../../hooks/firebase/useDocument";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {Group} from "../../types/group";
 import {LockUnlocked01} from "@untitled-ui/icons-react";
 import {GroupPostsList} from "../../sections/groups/group-posts-list";
 import {MiniCalendar} from "../../sections/calendar/mini-calendar";
+import {GroupAboutCard} from "../../sections/groups/group-about-card";
+import {GroupEventsCard} from "../../sections/groups/group-events-card";
+import {alpha} from "@mui/material/styles";
+import {GroupMembersList} from "../../sections/groups/members/list";
+import PrivateLogo from "../../assets/error-401.png";
 
 const tabs = [
     {label: "Home", value: "home"},
@@ -42,9 +47,8 @@ export const GroupProfile = () => {
     const params = useParams();
     const {document, error, isPending} = useDocument("groups", params.groupId!);
     const [group, setGroup] = useState<Group>();
-    const [currentTab, setCurrentTab] = useState<string>("home");
-    const [status, setStatus] = useState<string>("not_connected");
-    const [connectionsQuery, setConnectionsQuery] = useState<string>("");
+    const [currentTab, setCurrentTab] = useState<string>(params.tab || "home");
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (document) {
@@ -52,36 +56,13 @@ export const GroupProfile = () => {
         }
     }, [document]);
 
-    const handleConnectionAdd = useCallback(
-        (): void => {
-            setStatus("pending");
-        },
-        []
-    );
-
-    const handleConnectionRemove = useCallback(
-        (): void => {
-            setStatus("not_connected");
-        },
-        []
-    );
-
     const handleTabsChange = useCallback(
         (event: ChangeEvent<{}>, value: string): void => {
             setCurrentTab(value);
+            navigate(`/groups/${params.groupId}/${value}`, {replace: true})
         },
         []
     );
-
-    const handleConnectionsQueryChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement>): void => {
-            setConnectionsQuery(event.target.value);
-        },
-        []
-    );
-
-    const showConnect = status === "not_connected";
-    const showPending = status === "pending";
 
     return (
         <>
@@ -231,30 +212,30 @@ export const GroupProfile = () => {
                                     }
                                 }}
                             >
-                                {showConnect && (
-                                    <Button
-                                        onClick={handleConnectionAdd}
-                                        size="small"
-                                        startIcon={(
-                                            <SvgIcon>
-                                                <UserPlus02Icon/>
-                                            </SvgIcon>
-                                        )}
-                                        variant="outlined"
-                                    >
-                                        Connect
-                                    </Button>
-                                )}
-                                {showPending && (
-                                    <Button
-                                        color="primary"
-                                        onClick={handleConnectionRemove}
-                                        size="small"
-                                        variant="outlined"
-                                    >
-                                        Pending
-                                    </Button>
-                                )}
+                                {/*{showConnect && (*/}
+                                {/*    <Button*/}
+                                {/*        // onClick={handleConnectionAdd}*/}
+                                {/*        size="small"*/}
+                                {/*        startIcon={(*/}
+                                {/*            <SvgIcon>*/}
+                                {/*                <UserPlus02Icon/>*/}
+                                {/*            </SvgIcon>*/}
+                                {/*        )}*/}
+                                {/*        variant="outlined"*/}
+                                {/*    >*/}
+                                {/*        Connect*/}
+                                {/*    </Button>*/}
+                                {/*)}*/}
+                                {/*{showPending && (*/}
+                                {/*    <Button*/}
+                                {/*        color="primary"*/}
+                                {/*        // onClick={handleConnectionRemove}*/}
+                                {/*        size="small"*/}
+                                {/*        variant="outlined"*/}
+                                {/*    >*/}
+                                {/*        Pending*/}
+                                {/*    </Button>*/}
+                                {/*)}*/}
                                 <Button
                                     // component={RouterLink}
                                     // href={paths.dashboard.chat}
@@ -278,48 +259,99 @@ export const GroupProfile = () => {
                             </Tooltip>
                         </Stack>
                     </div>
-                    <Tabs
-                        indicatorColor="primary"
-                        onChange={handleTabsChange}
-                        scrollButtons="auto"
-                        sx={{mt: 2}}
-                        textColor="primary"
-                        value={currentTab}
-                        variant="scrollable"
-                    >
-                        {tabs.map((tab) => (
-                            <Tab
-                                key={tab.value}
-                                label={tab.label}
-                                value={tab.value}
-                                sx={{mx: {xs: 0, sm: 1, md: 2, lg: 3}}}
+                    {group?.isPrivate && <Container maxWidth="lg">
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                mb: 4,
+                                mt: 10
+                            }}
+                        >
+                            <Box
+                                alt="Not found"
+                                component="img"
+                                src={PrivateLogo}
+                                sx={{
+                                    height: 'auto',
+                                    maxWidth: '100%',
+                                    width: 250
+                                }}
                             />
-                        ))}
-                    </Tabs>
-                    <Divider/>
-                    <Box sx={{mt: 3}}>
-                        {currentTab === 'home' && (
-                            <Grid container spacing={2} justifyContent={'center'}>
-                                <Grid item xs={12} sm={12} md={7} lg={7}>
-                                    <GroupPostsList groupId={params.groupId!} />
-                                </Grid>
-                                <Hidden mdDown>
-                                    <Grid item xs={0} sm={0} md={5} lg={4}>
-                                        <MiniCalendar groupID={params.groupId!}/>
+                        </Box>
+                        <Typography
+                            align="center"
+                            variant={'h5'}
+                        >
+                            Private Group
+                        </Typography>
+                        <Typography
+                            align="center"
+                            color="text.secondary"
+                            sx={{ mt: 0.5 }}
+                        >
+                            This pages is only visible to members of this group. Join the group to see the content.
+                        </Typography>
+                    </Container>}
+                    {!group?.isPrivate && <Box>
+                        <Tabs
+                            indicatorColor="primary"
+                            onChange={handleTabsChange}
+                            scrollButtons="auto"
+                            sx={{
+                                position: "sticky",
+                                top: 64,
+                                zIndex: 1,
+                                mt: 2,
+                                backdropFilter: "blur(6px)",
+                                backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8),
+                            }}
+                            textColor="primary"
+                            value={currentTab}
+                            variant="scrollable"
+                        >
+                            {tabs.map((tab) => (
+                                <Tab
+                                    key={tab.value}
+                                    label={tab.label}
+                                    value={tab.value}
+                                    sx={{mx: {xs: 0, sm: 1, md: 2, lg: 3}}}
+                                />
+                            ))}
+                        </Tabs>
+                        <Divider/>
+                        <Box sx={{mt: 3}}>
+                            {currentTab === "home" && (
+                                <Grid container justifyContent={"center"} spacing={3}>
+                                    <Grid item xs={12} sm={12} md={7} lg={8}>
+                                        <GroupPostsList groupId={params.groupId!}/>
                                     </Grid>
-                                </Hidden>
+                                    <Hidden mdDown>
+                                        <Grid item xs={0} sm={0} md={5} lg={4}>
+                                            <GroupAboutCard group={group!}/>
+                                        </Grid>
+                                    </Hidden>
+                                </Grid>
 
-                            </Grid>
+                            )}
+                            {currentTab === "events" && (
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
+                                        <GroupEventsCard groupID={params.groupId!}/>
+                                    </Grid>
+                                    <Hidden mdDown>
+                                        <Grid item xs={0} sm={0} md={5} lg={5} xl={4}>
+                                            <MiniCalendar groupID={params.groupId!}/>
+                                        </Grid>
+                                    </Hidden>
+                                </Grid>
 
-                        )}
-                        {/*{currentTab === 'connections' && (*/}
-                        {/*  <SocialConnections*/}
-                        {/*    connections={connections}*/}
-                        {/*    onQueryChange={handleConnectionsQueryChange}*/}
-                        {/*    query={connectionsQuery}*/}
-                        {/*  />*/}
-                        {/*)}*/}
-                    </Box>
+                            )}
+                            {currentTab === "members" && (
+                                <GroupMembersList groupID={params.groupId!}/>
+                            )}
+                        </Box>
+                    </Box>}
                 </Container>
             </Box>
         </>
