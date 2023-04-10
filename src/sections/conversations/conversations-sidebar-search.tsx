@@ -90,7 +90,7 @@ export const ConversationsSidebarSearch = forwardRef<HTMLDivElement, Conversatio
                       color="text.secondary"
                       variant="subtitle2"
                     >
-                      Contacts
+                      Users
                     </Typography>
                     <List>
                       {results.map((contact) => (
@@ -100,7 +100,7 @@ export const ConversationsSidebarSearch = forwardRef<HTMLDivElement, Conversatio
                         >
                           <ListItemAvatar>
                             <Avatar
-                              src={contact.avatar}
+                              src={contact.imageURL}
                               sx={{
                                 height: 32,
                                 width: 32
@@ -108,7 +108,7 @@ export const ConversationsSidebarSearch = forwardRef<HTMLDivElement, Conversatio
                             />
                           </ListItemAvatar>
                           <ListItemText
-                            primary={contact.name}
+                            primary={`${contact.firstName} ${contact.lastName}`}
                             primaryTypographyProps={{
                               noWrap: true,
                               variant: 'subtitle2'

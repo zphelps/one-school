@@ -23,6 +23,7 @@ import {Scrollbar} from "../../components/scrollbar";
 import {ConversationsSidebarSearch} from "./conversations-sidebar-search";
 import {ConversationsThreadItem} from "./conversations-thread-item";
 import {useAuth} from "../../hooks/use-auth";
+import {useCollection} from "../../hooks/firebase/useCollection";
 
 const useThreads = (): { byId: Record<string, Thread>, allIds: string[] } => {
     // @ts-ignore
@@ -51,6 +52,12 @@ export const ConversationsSidebar: FC<ConversationsSidebarProps> = (props) => {
     const [searchResults, setSearchResults] = useState<User[]>([]);
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
 
+    const {documents: users, isPending, error} = useCollection(
+        "users",
+        ["id", "!=", user?.id],
+        []
+    );
+
     const handleCompose = useCallback(
         (): void => {
             router.push(paths.conversations + "?compose=true");
@@ -70,16 +77,13 @@ export const ConversationsSidebar: FC<ConversationsSidebarProps> = (props) => {
             }
 
             try {
-
-                //TODO: implement search
-                // const contacts = await chatApi.getContacts({ query: value });
-                //
-                // setSearchResults(contacts);
+                if (!users) return;
+                setSearchResults(users);
             } catch (err) {
                 console.error(err);
             }
         },
-        []
+        [users]
     );
 
     const handleSearchClickAway = useCallback(

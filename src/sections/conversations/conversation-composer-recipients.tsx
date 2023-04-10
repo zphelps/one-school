@@ -118,7 +118,7 @@ export const ConversationComposerRecipients: FC<ConversationComposerRecipientsPr
                                     fullWidth
                                     onChange={handleSearchChange}
                                     onFocus={handleSearchFocus}
-                                    placeholder="Search contacts"
+                                    placeholder="Search OneSchool users"
                                     ref={searchRef}
                                     startAdornment={(
                                         <InputAdornment position="start">

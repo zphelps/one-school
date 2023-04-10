@@ -78,7 +78,7 @@ export const ConversationThread: FC<ConversationThreadProps> = (props) => {
             // @ts-ignore
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
         }
-    }, [thread]);
+    }, [messages]);
 
     // Maybe implement a loading state
 
