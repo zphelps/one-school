@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Chip, SvgIcon } from '@mui/material';
+import {Avatar, Chip, SvgIcon} from "@mui/material";
 import BarChartSquare02Icon from '../../icons/untitled-ui/duocolor/bar-chart-square-02';
 import CurrencyBitcoinCircleIcon from '../../icons/untitled-ui/duocolor/currency-bitcoin-circle';
 import HomeSmileIcon from '../../icons/untitled-ui/duocolor/home-smile';
@@ -17,6 +17,7 @@ import {
 } from "@untitled-ui/icons-react";
 import { paths } from '../../paths';
 import MessageChatSquareIcon from "@untitled-ui/icons-react/build/esm/MessageChatSquare";
+import {useAuth} from "../../hooks/use-auth";
 
 export interface Item {
   disabled?: boolean;
@@ -35,6 +36,7 @@ export interface Section {
 
 export const useSections = () => {
   const { t } = useTranslation();
+  const auth = useAuth();
 
   return useMemo(
     () => {
@@ -51,8 +53,8 @@ export const useSections = () => {
               )
             },
             {
-              title: 'Alerts',
-              path: paths.alerts.index,
+              title: 'Announcements',
+              path: paths.announcements.index,
               icon: (
                 <SvgIcon fontSize="small">
                   <Announcement01 />
@@ -114,6 +116,30 @@ export const useSections = () => {
               )
             }
           ]
+        },
+        {
+          subheader: "My Clubs",
+          items: (auth.user?.groupsMemberOf ?? []).filter(group => group.type === 'Club').map((group) => {
+            return {
+              title: group.name,
+              path: `${paths.groups.index}/${group.id}`,
+              icon: (
+                  <Avatar sx={{m:0, p:0, width: '32px', height: '32px'}} src={group.profileImageURL} />
+              ),
+            }
+          }),
+        },
+        {
+          subheader: "My Teams",
+          items: (auth.user?.groupsMemberOf ?? []).filter(group => group.type === 'Team').map((group) => {
+            return {
+              title: group.name,
+              path: `${paths.groups.index}/${group.id}`,
+              icon: (
+                  <Avatar sx={{m:0, p:0, width: '32px', height: '32px'}} src={group.profileImageURL} />
+              ),
+            }
+          }),
         },
       ];
     },

@@ -195,7 +195,7 @@ export const createComponents = (): Components => {
     MuiInput: {
       styleOverrides: {
         input: {
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: 500,
           lineHeight: '24px'
         }
@@ -233,7 +233,7 @@ export const createComponents = (): Components => {
           }
         },
         input: {
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: 500,
           lineHeight: '24px'
         }
@@ -242,7 +242,7 @@ export const createComponents = (): Components => {
     MuiOutlinedInput: {
       styleOverrides: {
         input: {
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: 500,
           lineHeight: '24px'
         },
@@ -300,7 +300,7 @@ export const createComponents = (): Components => {
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: 'none'
+          backgroundImage: 'none',
         }
       }
     },

@@ -38,7 +38,13 @@ export const EventDetailsTiles: FC<EventAboutTilesProps> = (props) => {
                         justifyContent: "center",
                     }}
                 >
-                    <Typography variant={"subtitle1"}>{format(new Date(event?.start ?? 0), 'PPPP')}</Typography>
+                    <Typography
+                        variant={"subtitle1"}
+                    >
+                        {format(new Date(event?.start ?? 0), 'PPPP')}
+                        {event?.end != null && new Date(event?.end ?? 0).getDay() !== new Date(event?.start ?? 0).getDay()
+                            ? ` - ${format(new Date(event?.end ?? 0), 'PPPP')}` : ''}
+                    </Typography>
                     <Typography>
                         {`${format(new Date(event?.start ?? 0), 'p')}  ${event?.end != null ? `- ${format(new Date(event?.end ?? 0), 'p')}` : ''}`}
                     </Typography>
@@ -67,7 +73,9 @@ export const EventDetailsTiles: FC<EventAboutTilesProps> = (props) => {
                     }}
                 >
                     <Typography variant={"subtitle1"}>{event?.location.name}</Typography>
-                    <Typography>
+                    <Typography
+                        variant={"body1"}
+                    >
                         {event?.location.formattedAddress}
                     </Typography>
                 </Stack>

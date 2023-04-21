@@ -205,7 +205,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
                             })}
                         >
                             <ListItemAvatar>
-                                <Avatar src={event.group?.imageURL}/>
+                                <Avatar src={event.group?.profileImageURL}/>
                             </ListItemAvatar>
                             <ListItemText
                                 primary={event.title}

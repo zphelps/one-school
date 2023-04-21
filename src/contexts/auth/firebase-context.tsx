@@ -114,6 +114,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
               imageURL: user?.imageURL,
               phone: user?.phone,
               isActive: user?.isActive,
+              groupsMemberOf: user?.groupsMemberOf,
             }
           }
         });

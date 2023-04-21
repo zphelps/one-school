@@ -14,7 +14,7 @@ export const useDocument = (_collection: string, id: string) => {
         const ref = doc(db, "tenants", "ParkTudorSchoolDev-fse0k", _collection, id)
 
         const unsub = onSnapshot(ref, snap => {
-            if (!snap.exists) {
+            if (!snap.data()) {
                 // @ts-ignore
                 setError('That document does not exist')
                 return

@@ -1,16 +1,18 @@
 import 'react'
 import {FC} from "react";
 import {Group} from "../../types/group";
-import {Avatar, Box, Card, Paper, Stack, styled, SvgIcon, Typography} from "@mui/material";
+import {Avatar, Box, Card, Paper, Stack, styled, SvgIcon, Tooltip, Typography} from "@mui/material";
 import {LockUnlocked01} from "@untitled-ui/icons-react";
 import {Link, useNavigate} from "react-router-dom";
-import EventIcon from '@mui/icons-material/Event';
+import EventIcon from '@mui/icons-material/EventOutlined';
+import GroupIcon from '@mui/icons-material/GroupOutlined';
+import FolderIcon from '@mui/icons-material/FolderOutlined';
 
 interface GroupCardProps {
     group: Group;
 }
 
-const HoverGrowthCard = styled(Card)`
+export const HoverGrowthCard = styled(Card)`
   transition: transform 0.3s;
   padding-bottom: 10px;
   &:hover {
@@ -20,6 +22,7 @@ const HoverGrowthCard = styled(Card)`
 
 export const GroupCard: FC<GroupCardProps> = (props) => {
     const {group} = props;
+    const navigate = useNavigate();
 
     return (
         <Link to={'/groups/' + group.id} style={{textDecoration: 'none'}}>
@@ -36,7 +39,9 @@ export const GroupCard: FC<GroupCardProps> = (props) => {
                 />
                 <Box
                     sx={{
-                        p: 2,
+                        pt: 2,
+                        px: 2,
+                        pb: 1
                     }}
                 >
                     <Avatar
@@ -61,9 +66,9 @@ export const GroupCard: FC<GroupCardProps> = (props) => {
                         <Paper
                             variant={'outlined'}
                             sx={{
+                                borderColor: "#e5e5e5",
                                 alignContent: 'end',
                                 justifyContent: 'end',
-
                                 display: 'inline-block',
                                 alignItems: 'end',
                                 px: 1,
@@ -101,17 +106,80 @@ export const GroupCard: FC<GroupCardProps> = (props) => {
                         </Typography>
                     </Stack>
 
-                    {/*<Stack direction={'row'} spacing={1}>*/}
-                    {/*    <Paper variant={'outlined'} sx={{width: '100%', alignItems:'center', justifyContent:'center'}}>*/}
-                    {/*        <EventIcon sx={{color: 'text.secondary'}}/>*/}
-                    {/*    </Paper>*/}
-                    {/*    <Paper variant={'outlined'} sx={{width: '100%'}}>*/}
-                    {/*        <EventIcon sx={{color: 'text.secondary'}}/>*/}
-                    {/*    </Paper>*/}
-                    {/*    <Paper variant={'outlined'} sx={{width: '100%'}}>*/}
-                    {/*        <EventIcon sx={{color: 'text.secondary'}}/>*/}
-                    {/*    </Paper>*/}
-                    {/*</Stack>*/}
+                    <Stack direction={'row'} spacing={1} sx={{mt: 2}}>
+                        <Tooltip title={'Events'}>
+                            <Paper
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    navigate('/groups/' + group.id + '/events')
+                                }}
+                                variant={'outlined'}
+                                sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    px: 1,
+                                    py: 1,
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        backgroundColor: 'action.hover'
+                                    },
+                                }}
+                            >
+                                <EventIcon sx={{color: 'text.secondary'}}/>
+                            </Paper>
+                        </Tooltip>
+                        <Tooltip title={'Members'}>
+                            <Paper
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    navigate('/groups/' + group.id + '/members')
+                                }}
+                                variant={'outlined'}
+                                sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    px: 1,
+                                    py: 1,
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        backgroundColor: 'action.hover'
+                                    },
+                                }}
+                            >
+                                <GroupIcon sx={{color: 'text.secondary'}}/>
+                            </Paper>
+                        </Tooltip>
+                        <Tooltip title= {'Files'}>
+                            <Paper
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    navigate('/groups/' + group.id + '/files')
+                                }}
+                                variant={'outlined'}
+                                sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    px: 1,
+                                    py: 1,
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        backgroundColor: 'action.hover'
+                                    },
+                                }}
+                            >
+                                <FolderIcon sx={{color: 'text.secondary'}}/>
+                            </Paper>
+                        </Tooltip>
+                    </Stack>
 
                     {/*<Typography*/}
                     {/*    variant={'subtitle2'}*/}

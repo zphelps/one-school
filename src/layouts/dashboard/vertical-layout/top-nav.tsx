@@ -10,7 +10,7 @@ import { NotificationsButton } from '../notifications-button';
 import { SearchButton } from '../search-button';
 
 const TOP_NAV_HEIGHT: number = 64;
-const SIDE_NAV_WIDTH: number = 280;
+const SIDE_NAV_WIDTH: number = 250;
 
 interface TopNavProps {
   onMobileNavOpen?: () => void;
@@ -67,7 +67,6 @@ export const TopNav: FC<TopNavProps> = (props) => {
           direction="row"
           spacing={2}
         >
-          <LanguageSwitch />
           <NotificationsButton />
           <AccountButton />
         </Stack>

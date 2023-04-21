@@ -1,5 +1,5 @@
 import type {FC, JSXElementConstructor, Key, ReactElement, ReactFragment, ReactPortal} from "react";
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import {addMinutes} from "date-fns";
@@ -19,7 +19,7 @@ import {
     Divider,
     FormControlLabel,
     FormHelperText, Grid,
-    IconButton,
+    IconButton, Paper,
     Stack,
     SvgIcon,
     Switch,
@@ -27,9 +27,7 @@ import {
     TextFieldProps,
     Typography
 } from "@mui/material";
-// import {useDispatch} from 'src/store';
-// import {thunks} from 'src/thunks/calendar';
-import type {CalendarEvent} from "../../types/calendar";
+import type {Attendance, CalendarEvent} from "../../types/calendar";
 import {DateTimePicker} from "@mui/x-date-pickers";
 import {v4 as uuidv4} from "uuid";
 import {enumToArray} from "../../utils/enum";
@@ -39,9 +37,15 @@ import CalendarEvents from "../../slices/events/calendar-events";
 import {Calendar, Ticket01, Ticket02} from "@untitled-ui/icons-react";
 import {Rsvp} from "@mui/icons-material";
 import {httpsCallable} from "firebase/functions";
-import {functions} from "../../config";
+import {functions, storage} from "../../config";
 import {useAuth} from "../../hooks/use-auth";
 import {useNavigate} from "react-router-dom";
+import Image01Icon from "@untitled-ui/icons-react/build/esm/Image01";
+import {blueGrey} from "@mui/material/colors";
+import {ManageAttendanceForm} from "../../components/events/manage-attendance-form";
+import {useDropzone} from "react-dropzone";
+import {ref} from "firebase/storage";
+import {uploadFile} from "../../utils/firebase_storage";
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyC_G41bRZ4HKG0cxLOTElatucbkn8mDbuE";
 
@@ -85,8 +89,10 @@ interface Values {
     group: {
         id: string | undefined;
         name: string | undefined;
-        imageURL: string | undefined;
         type: string | undefined;
+        memberCount?: number | undefined;
+        profileImageURL?: string | undefined;
+        backgroundImageURL?: string | undefined;
     } | null;
     location: {
         formattedAddress: string | null;
@@ -94,13 +100,10 @@ interface Values {
         name: string | null;
         format: string | null;
         description: string | null;
+        url: string | null;
     };
     targetIDs: string[];
-    attendance: {
-        attending: string[];
-        maybe: string[];
-        notAttending: string[];
-    } | null;
+    attendance: Attendance | null;
     allDay: boolean;
     color?: string;
     description: string;
@@ -146,7 +149,8 @@ const useInitialValues = (
                     mapImageURL: null,
                     name: null,
                     format: null,
-                    description: null
+                    description: null,
+                    url: null,
                 },
                 targetIDs: [],
                 visibility: Visibility.MEMBERS_ONLY,
@@ -165,28 +169,6 @@ const useInitialValues = (
         [event]
     );
 };
-
-const validationSchema = Yup.object({
-    allDay: Yup.bool(),
-    description: Yup.string().max(5000),
-    end: Yup.date(),
-    start: Yup.date(),
-    group: Yup.object({
-        id: Yup.string().min(10),
-        name: Yup.string(),
-        imageURL: Yup.string(),
-        type: Yup.string()
-    }).required("Please select a group"),
-    location: Yup.object({
-        name: Yup.string(),
-        format: Yup.string(),
-    }).required("Please select a location"),
-    public: Yup.bool(),
-    title: Yup
-        .string()
-        .max(255)
-        .required("Title is required")
-});
 
 type Action = "create" | "update"
 
@@ -210,6 +192,31 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
         onEditComplete,
         open = false,
     } = props;
+    const [locationType, setLocationType] = useState(LocationType.IN_PERSON);
+    const validationSchema = Yup.object({
+        allDay: Yup.bool(),
+        description: Yup.string().max(5000),
+        end: Yup.date(),
+        start: Yup.date(),
+        group: Yup.object({
+            id: Yup.string().min(10),
+            name: Yup.string(),
+            imageURL: Yup.string(),
+            type: Yup.string()
+        }).required("Please select a group"),
+        location: Yup.object({
+            name: Yup.string().notRequired(),
+            format: Yup.string(),
+            formattedAddress: locationType === LocationType.IN_PERSON ? Yup.string().min(5).required("Please enter a valid address") : Yup.string().notRequired(),
+            url: locationType === LocationType.VIRTUAL
+                ? Yup.string().url("Please enter a valid URL").min(10).required("Please enter a valid URL") : Yup.string(),
+        }).required("Please select a location"),
+        public: Yup.bool(),
+        title: Yup
+            .string()
+            .max(255)
+            .required("Title is required")
+    });
     const auth = useAuth();
     const navigate = useNavigate();
     const initialValues = useInitialValues(event);
@@ -219,13 +226,15 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
         validationSchema,
         onSubmit: async (values, helpers): Promise<void> => {
             try {
-                const data = {
+                if (showManageAttendanceForm && !attendance) return;
+
+                let data = {
                     id: values.id,
                     group: values.group,
                     location: values.location,
                     targetIDs: [...values.targetIDs, values.group?.id],
                     public: values.visibility != Visibility.MEMBERS_ONLY,
-                    attendance: values.attendance,
+                    attendance: attendance,
                     imageURL: values.imageURL,
                     allDay: values.allDay,
                     description: values.description,
@@ -234,6 +243,15 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                     start: values.start.getTime(),
                     title: values.title,
                 };
+
+                if(imageFile) {
+                    const storageRef = ref(storage, `tenants/${auth.user?.tenantID}/posts/${data.id}/${imageFile.name}`);
+                    const imageURL = await uploadFile(storageRef, imageFile);
+                    data = {
+                        ...data,
+                        imageURL: imageURL
+                    }
+                }
 
                 if (action === "update") {
                     // await dispatch(thunks.updateEvent({
@@ -247,7 +265,7 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                     if (result.data) {
                         formik.resetForm();
                         // @ts-ignore
-                        navigate(`/events/${data.id}`)
+                        navigate(`/events/${data.id}`);
                         toast.success("Event created");
                     } else {
                         toast.error("Something went wrong!");
@@ -269,6 +287,24 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
             }
         }
     });
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const {getRootProps, getInputProps, isDragActive} = useDropzone(
+        {
+            accept: {
+                "image/*": [],
+            },
+            onDrop: (acceptedFiles) => {
+                const file = acceptedFiles[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        setImageFile(file);
+                        formik.setFieldValue("imageURL", reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
 
     const [value, setValue] = useState<PlaceType | null>(null);
     const [inputValue, setInputValue] = useState("");
@@ -392,7 +428,8 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
 
     const [includeEndDate, setIncludeEndDate] = useState(false);
 
-    const [locationType, setLocationType] = useState(LocationType.IN_PERSON);
+    const [showManageAttendanceForm, setShowManageAttendanceForm] = useState(false);
+    const [attendance, setAttendance] = useState<Attendance>();
 
     useEffect(() => {
         if (groups) {
@@ -401,8 +438,10 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                 return {
                     id: group.id,
                     name: group.name,
-                    imageURL: group.profileImageURL,
+                    profileImageURL: group.profileImageURL,
+                    backgroundImageURL: group.backgroundImageURL,
                     type: group.type,
+                    memberCount: group.memberCount,
                 };
             }));
         }
@@ -415,14 +454,14 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
             onClose={onClose}
             open={open}
             sx={{
-                '& .MuiDialog-paper': {
+                "& .MuiDialog-paper": {
                     margin: 0,
-                    width: '100%',
+                    width: "100%",
                 },
             }}
         >
             <form onSubmit={formik.handleSubmit}>
-                <Box sx={{px: 3, pt: 3}}>
+                <Box sx={{px: 3, pt: 3, pb: 1.5}}>
                     <Typography
                         align="center"
                         gutterBottom
@@ -435,11 +474,62 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                         }
                     </Typography>
                 </Box>
+                <Divider sx={{borderColor: "#e5e5e5"}}/>
                 <Stack
                     spacing={2}
                     sx={{p: 3}}
                 >
 
+                    <Box
+                        sx={{
+                            mx: -3,
+                            mt: -3,
+                            mb: 1,
+                            minWidth: "100%",
+                            height: "200px",
+                            backgroundColor: blueGrey[50],//'#f5f5f5',
+                            position: "relative",
+                        }}
+                        {...getRootProps()}
+                    >
+                        <input {...getInputProps()}/>
+                        {formik.values.imageURL && <img
+                            src={formik.values.imageURL}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                            }}
+                        />}
+                        <Button
+                            startIcon={(
+                                <SvgIcon>
+                                    <Image01Icon/>
+                                </SvgIcon>
+                            )}
+                            disableElevation
+                            sx={{
+                                backgroundColor: blueGrey[300],
+                                bottom: {
+                                    lg: 24,
+                                    xs: "auto"
+                                },
+                                color: "common.white",
+                                position: "absolute",
+                                right: 24,
+                                top: {
+                                    lg: "auto",
+                                    xs: 24
+                                },
+                                "&:hover": {
+                                    backgroundColor: blueGrey[900]
+                                }
+                            }}
+                            variant="contained"
+                        >
+                            Add Cover Photo
+                        </Button>
+                    </Box>
                     <Autocomplete
                         id="group-selection"
                         onChange={(event, newValue) => {
@@ -452,13 +542,23 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                         loading={isPending}
                         renderOption={(props, option) => (
                             <li {...props}>
-                                <Avatar src={option.imageURL} sx={{width: "36px", height: "36px"}}/>
-                                <Typography
-                                    sx={{ml: 2}}
-                                    variant="body1"
-                                >
-                                    {option.name}
-                                </Typography>
+                                <Avatar src={option.profileImageURL} sx={{width: "36px", height: "36px"}}/>
+                                <Stack>
+                                    <Typography
+                                        sx={{ml: 2}}
+                                        variant="body1"
+                                    >
+                                        {option.name}
+                                    </Typography>
+                                    <Typography
+                                        sx={{ml: 2}}
+                                        variant="caption"
+                                        color={"text.secondary"}
+                                    >
+                                        {option.memberCount} member(s)
+                                    </Typography>
+                                </Stack>
+
                             </li>
                         )}
                         renderInput={(params) => (
@@ -505,9 +605,10 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                         )))}
                     </TextField>
 
-                    <Divider/>
+                    <Divider sx={{borderColor: "#e5e5e5"}}/>
 
                     <TextField
+                        required
                         error={!!(formik.touched.title && formik.errors.title)}
                         fullWidth
                         helperText={formik.touched.title && formik.errors.title}
@@ -537,102 +638,139 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                         {includeEndDate ? "- " : "+ "} End Date
                     </Button>
 
-                    <TextField
-                        label="In-Person or Virtual?"
-                        onChange={(e) => {
-                            // @ts-ignore
-                            setLocationType(e.target.value);
-                        }}
-                        select
-                        SelectProps={{native: true}}
+                    <Divider sx={{borderColor: "#e5e5e5"}}/>
+
+                    <Paper
+                        variant={"outlined"}
                         sx={{
-                            minWidth: 120,
+                            p: 2,
+                            borderColor: "#e5e5e5"
                         }}
-                        value={locationType}
                     >
-                        {(enumToArray(LocationType).map((k) => (
-                            <option
-                                key={k.key}
-                                value={k.value}
+                        <Stack spacing={1.5}>
+
+                            <TextField
+                                required
+                                label="In-Person or Virtual?"
+                                onChange={(e) => {
+                                    // @ts-ignore
+                                    setLocationType(e.target.value);
+                                }}
+                                select
+                                SelectProps={{native: true}}
+                                sx={{
+                                    minWidth: 120,
+                                }}
+                                value={locationType}
                             >
-                                {k.value}
-                            </option>
-                        )))}
-                    </TextField>
+                                {(enumToArray(LocationType).map((k) => (
+                                    <option
+                                        key={k.key}
+                                        value={k.value}
+                                    >
+                                        {k.value}
+                                    </option>
+                                )))}
+                            </TextField>
 
-                    <Autocomplete
-                        id="physical-location"
-                        getOptionLabel={(option) =>
-                            typeof option === "string" ? option : option.description
-                        }
-                        onBlur={formik.handleBlur}
-                        filterOptions={(x) => x}
-                        options={options}
-                        autoComplete
-                        includeInputInList
-                        filterSelectedOptions
-                        value={value}
-                        noOptionsText="No locations"
-                        onChange={(event: any, newValue: PlaceType | null) => {
-                            formik.setFieldValue("location", {
-                                name: newValue?.structured_formatting.main_text,
-                                formattedAddress: newValue?.structured_formatting.secondary_text,
-                                description: newValue?.description,
-                                mapImageURL: null,
-                                format: locationType,
-                            });
-                            setOptions(newValue ? [newValue, ...options] : options);
-                            setValue(newValue);
-                        }}
-                        onInputChange={(event, newInputValue) => {
-                            setInputValue(newInputValue);
-                        }}
-                        renderInput={(params) => (
-                            <TextField {...params}
-                                       onBlur={formik.handleBlur}
-                                       id={"location"}
-                                       name={"location"}
-                                       label="Add location"
-                                       error={!!(formik.touched.location && formik.errors.location)}
-                                       fullWidth
-                            />
-                        )}
-                        renderOption={(props, option) => {
-                            const matches =
-                                option.structured_formatting.main_text_matched_substrings || [];
+                            {locationType === LocationType.VIRTUAL && <TextField
+                                label="Event Link"
+                                placeholder={"https://"}
+                                helperText={formik.touched.location?.url && formik.errors.location?.url}
+                                error={!!(formik.touched.location && formik.errors.location)}
+                                onBlur={formik.handleBlur}
+                                onChange={(e) => {
+                                    formik.setFieldValue("location", {
+                                        name: null,
+                                        formattedAddress: null,
+                                        description: null,
+                                        mapImageURL: null,
+                                        format: locationType,
+                                        url: e.target.value
+                                    });
+                                }}
+                                sx={{
+                                    minWidth: 120,
+                                }}
+                            />}
 
-                            const parts = parse(
-                                option.structured_formatting.main_text,
-                                matches.map((match: any) => [match.offset, match.offset + match.length]),
-                            );
+                            {locationType === LocationType.IN_PERSON && <Autocomplete
+                                id="physical-location"
+                                getOptionLabel={(option) =>
+                                    typeof option === "string" ? option : option.description
+                                }
+                                onBlur={formik.handleBlur}
+                                filterOptions={(x) => x}
+                                options={options}
+                                autoComplete
+                                includeInputInList
+                                filterSelectedOptions
+                                value={value}
+                                noOptionsText="No locations found"
+                                onChange={(event: any, newValue: PlaceType | null) => {
+                                    formik.setFieldValue("location", {
+                                        name: newValue?.structured_formatting.main_text,
+                                        formattedAddress: newValue?.structured_formatting.secondary_text,
+                                        description: newValue?.description,
+                                        mapImageURL: null,
+                                        format: locationType,
+                                    });
+                                    setOptions(newValue ? [newValue, ...options] : options);
+                                    setValue(newValue);
+                                }}
+                                onInputChange={(event, newInputValue) => {
+                                    setInputValue(newInputValue);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField {...params}
+                                               onBlur={formik.handleBlur}
+                                               id={"location"}
+                                               name={"location"}
+                                               label="Add physical location"
+                                               error={!!(formik.touched.location && formik.errors.location)}
+                                               fullWidth
+                                    />
+                                )}
+                                renderOption={(props, option) => {
+                                    const matches =
+                                        option.structured_formatting.main_text_matched_substrings || [];
 
-                            return (
-                                <li {...props}>
-                                    <Grid container alignItems="center">
-                                        <Grid item sx={{display: "flex", width: 44}}>
-                                            <LocationOnIcon sx={{color: "text.secondary"}}/>
-                                        </Grid>
-                                        <Grid item sx={{width: "calc(100% - 44px)", wordWrap: "break-word"}}>
-                                            {parts.map((part: { highlight: any; text: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; }, index: Key | null | undefined) => {
-                                                return (
-                                                    <Box
-                                                        key={index}
-                                                        component="span"
-                                                        sx={{fontWeight: part.highlight ? "bold" : "regular"}}
-                                                    >
-                                                        {part.text}
-                                                    </Box>
-                                                );
-                                            })}
-                                            <Typography variant="body2" color="text.secondary">
-                                                {option.structured_formatting.secondary_text}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </li>
-                            );
-                        }}
-                    />
+                                    const parts = parse(
+                                        option.structured_formatting.main_text,
+                                        matches.map((match: any) => [match.offset, match.offset + match.length]),
+                                    );
+
+                                    return (
+                                        <li {...props}>
+                                            <Grid container alignItems="center">
+                                                <Grid item sx={{display: "flex", width: 44}}>
+                                                    <LocationOnIcon sx={{color: "text.secondary"}}/>
+                                                </Grid>
+                                                <Grid item sx={{width: "calc(100% - 44px)", wordWrap: "break-word"}}>
+                                                    {parts.map((part: { highlight: any; text: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; }, index: Key | null | undefined) => {
+                                                        return (
+                                                            <Box
+                                                                key={index}
+                                                                component="span"
+                                                                sx={{fontWeight: part.highlight ? "bold" : "regular"}}
+                                                            >
+                                                                {part.text}
+                                                            </Box>
+                                                        );
+                                                    })}
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {option.structured_formatting.secondary_text}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </li>
+                                    );
+                                }}
+                            />}
+                        </Stack>
+                    </Paper>
+
+                    <Divider sx={{borderColor: "#e5e5e5"}}/>
 
                     <TextField
                         error={!!(formik.touched.description && formik.errors.description)}
@@ -647,27 +785,50 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                         value={formik.values.description}
                     />
 
-                    <Divider/>
+                    <Divider sx={{borderColor: "#e5e5e5"}}/>
 
-                    <Accordion variant={"outlined"}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            sx={{alignItems: "center", alignContent: "center"}}
-                        >
-                            <SvgIcon>
-                                <Ticket01/>
-                            </SvgIcon>
-                            <Typography sx={{pl: 2}}>Manage Attendance</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                                malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
+                    <Paper
+                        variant={"outlined"}
+                        sx={{
+                            px: 2,
+                            py: 1.5,
+                            borderColor: "#e5e5e5"
+                        }}
+                    >
+                        <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+                            <Stack direction={"row"}>
+                                <SvgIcon>
+                                    <Ticket01/>
+                                </SvgIcon>
+                                <Typography sx={{pl: 2}}>Manage Attendance</Typography>
+                            </Stack>
+                            <Switch
+                                checked={showManageAttendanceForm}
+                                onChange={() => setShowManageAttendanceForm(!showManageAttendanceForm)}
+                            />
+                        </Stack>
+                        {showManageAttendanceForm && <ManageAttendanceForm setAttendance={setAttendance}/>}
+                    </Paper>
+
+                    {/*<Accordion variant={"outlined"}>*/}
+                    {/*    <AccordionSummary*/}
+                    {/*        expandIcon={<ExpandMoreIcon/>}*/}
+                    {/*        aria-controls="panel1a-content"*/}
+                    {/*        id="panel1a-header"*/}
+                    {/*        sx={{alignItems: "center", alignContent: "center"}}*/}
+                    {/*    >*/}
+                    {/*        <SvgIcon>*/}
+                    {/*            <Ticket01/>*/}
+                    {/*        </SvgIcon>*/}
+                    {/*        <Typography sx={{pl: 2}}>Manage Attendance</Typography>*/}
+                    {/*    </AccordionSummary>*/}
+                    {/*    <AccordionDetails>*/}
+                    {/*        <Typography>*/}
+                    {/*            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse*/}
+                    {/*            malesuada lacus ex, sit amet blandit leo lobortis eget.*/}
+                    {/*        </Typography>*/}
+                    {/*    </AccordionDetails>*/}
+                    {/*</Accordion>*/}
 
                     {!!(formik.touched.end && formik.errors.end) && (
                         <FormHelperText error>
@@ -675,7 +836,7 @@ export const CreateCalendarEventDialog: FC<CalendarEventDialogProps> = (props) =
                         </FormHelperText>
                     )}
                 </Stack>
-                <Divider/>
+                <Divider sx={{borderColor: "#e5e5e5"}}/>
                 <Stack
                     alignItems="center"
                     direction="row"

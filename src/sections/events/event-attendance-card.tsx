@@ -1,8 +1,8 @@
 import 'react'
 import {FC} from "react";
 import {CalendarEvent} from "../../types/calendar";
-import {Card, Paper, Stack, Typography} from "@mui/material";
-import {EventDetailsTiles} from "./event-details-tiles";
+import {Card, Divider, Paper, Stack, Typography} from "@mui/material";
+import {EventAttendanceForm} from "./event-attendance-form";
 
 interface EventAttendanceProps {
     event?: CalendarEvent;
@@ -11,7 +11,7 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
     const {event} = props;
     return (
         <Card sx={{p: 3}}>
-            <Stack>
+            <Stack sx={{mb: 2}}>
                 <Typography variant={"h5"} sx={{pb:3}}>
                     Attendance
                 </Typography>
@@ -21,7 +21,7 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                             variant={"h5"}
                             textAlign={"center"}
                         >
-                            {event?.attendance?.attending.length}
+                            {event?.attendance?.RSVP?.attending.length}
                         </Typography>
                         <Typography
                             textAlign={"center"}
@@ -35,7 +35,7 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                             variant={"h5"}
                             textAlign={"center"}
                         >
-                            {event?.attendance?.maybe.length}
+                            {event?.attendance?.RSVP?.maybe.length}
                         </Typography>
                         <Typography
                             textAlign={"center"}
@@ -49,7 +49,7 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                             variant={"h5"}
                             textAlign={"center"}
                         >
-                            {event?.attendance?.notAttending.length}
+                            {event?.attendance?.RSVP?.notAttending.length}
                         </Typography>
                         <Typography
                             textAlign={"center"}
@@ -59,6 +59,8 @@ export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
                     </Stack>
                 </Stack>
             </Stack>
+            <Divider sx={{my: 2, borderColor: '#e5e5e5'}}/>
+            {event?.attendance?.RSVP && <EventAttendanceForm event={event}/>}
         </Card>
     );
 }

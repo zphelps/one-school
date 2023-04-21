@@ -8,9 +8,12 @@ import {format} from "date-fns";
 import {EventDetailsCard} from "../../sections/events/event-details-card";
 import {EventHeadlineCard} from "../../sections/events/event-headline-card";
 import {EventLocationCard} from "../../sections/events/event-location-card";
-import {EventHostCard} from "../../sections/events/event-host-card";
 import {EventAttendanceCard} from "../../sections/events/event-attendance-card";
 import {Seo} from "../../components/seo";
+import {GroupCard} from "../../components/groups/group-card";
+import {Group} from "../../types/group";
+import {EventTicketsCard} from "../../sections/events/event-tickets-card";
+import {BadURL} from "../404";
 
 export const EventDetails = () => {
     const params = useParams<{ eventId: string }>()
@@ -21,12 +24,16 @@ export const EventDetails = () => {
         if (document) {
             setEvent(document)
         }
-    },[document])
+    },[document, error])
+
+    if(error) {
+        return <BadURL/>
+    }
 
     return (
         <>
             <Seo title={`${event?.title} | OneSchool`}/>
-            <Container sx={{my: 4}}>
+            <Container maxWidth={'xl'} sx={{my: 4}}>
                 {isPending && <Typography>Loading...</Typography>}
                 {error && <Typography>Error: {error}</Typography>}
 
@@ -42,8 +49,9 @@ export const EventDetails = () => {
                     </Grid>
                     <Grid item xs={12} sm={12} md={5}>
                         <Stack spacing={3}>
-                            {event.attendance != null && <EventAttendanceCard event={event}/>}
-                            <EventHostCard groupID={event?.group?.id}/>
+                            {event.attendance?.RSVP != null && <EventAttendanceCard event={event}/>}
+                            {event.attendance?.ticket != null && <EventTicketsCard event={event}/>}
+                            <GroupCard group={event.group as Group}/>
                         </Stack>
                     </Grid>
                 </Grid>}

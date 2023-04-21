@@ -1,5 +1,5 @@
 import type {ChangeEvent} from "react";
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import MessageChatSquareIcon from "@untitled-ui/icons-react/build/esm/MessageChatSquare";
 import DotsHorizontalIcon from "@untitled-ui/icons-react/build/esm/DotsHorizontal";
 import Image01Icon from "@untitled-ui/icons-react/build/esm/Image01";
@@ -11,7 +11,7 @@ import {
     Container,
     Divider,
     Grid, Hidden,
-    IconButton,
+    IconButton, Skeleton,
     Stack,
     SvgIcon,
     Tab,
@@ -32,6 +32,7 @@ import {GroupEventsCard} from "../../sections/groups/group-events-card";
 import {alpha} from "@mui/material/styles";
 import {GroupMembersList} from "../../sections/groups/members/list";
 import PrivateLogo from "../../assets/error-401.png";
+import {CreatePostPromptCard} from "../../components/feed/create-post-prompt-card";
 
 const tabs = [
     {label: "Home", value: "home"},
@@ -131,15 +132,14 @@ export const GroupProfile = () => {
                             alignItems="center"
                             direction="row"
                             spacing={2}
-                            sx={{mt: 2}}
+                            sx={{mt: 1}}
                         >
                             <Stack
                                 alignItems={{xs: "start", sm: "start", md: "center"}}
                                 direction="row"
                                 spacing={2}
                             >
-                                <Avatar
-
+                                {group && <Avatar
                                     src={group?.profileImageURL!}
                                     sx={{
                                         maxWidth: "140px",
@@ -149,7 +149,19 @@ export const GroupProfile = () => {
                                         height: "12vw",
                                         width: "12vw",
                                     }}
-                                />
+                                />}
+
+                                {!group && <Skeleton
+                                    variant="circular"
+                                    style={{
+                                        maxWidth: "140px",
+                                        maxHeight: "140px",
+                                        minHeight: "76px",
+                                        minWidth: "75px",
+                                        height: "12vw",
+                                        width: "12vw",
+                                    }}
+                                />}
 
                                 <div>
                                     {/*<Typography*/}
@@ -158,9 +170,10 @@ export const GroupProfile = () => {
                                     {/*>*/}
                                     {/*  {'Administration'}*/}
                                     {/*</Typography>*/}
-                                    <Typography variant="h4">
+                                    {group && <Typography variant="h4">
                                         {group?.name}
-                                    </Typography>
+                                    </Typography>}
+                                    {!group && <Skeleton width="200px" height={50} />}
                                     <Stack direction={"row"} alignItems={"center"} sx={{mt: 0.5}}>
                                         {/* @ts-ignore */}
                                         <SvgIcon fontSize={"xs"} sx={{color: "text.secondary", mr: 0.75}}>
@@ -180,7 +193,7 @@ export const GroupProfile = () => {
                                             {group?.memberCount} {group?.memberCount == 1 ? "member" : "members"}
                                         </Typography>
                                     </Stack>
-                                    <Typography
+                                    {group && <Typography
                                         sx={{
                                             mt: 1,
                                             display: "-webkit-box",
@@ -197,59 +210,26 @@ export const GroupProfile = () => {
                                         // color={'text.secondary'}
                                     >
                                         {group?.description}
-                                    </Typography>
+                                    </Typography>}
+                                    {!group && <>
+                                        <Skeleton width="80%" height={24} style={{ marginTop: '10px' }}/>
+                                        <Skeleton width="60%" height={20} style={{ marginTop: '4px', marginBottom: '16px' }} />
+                                    </>}
                                 </div>
                             </Stack>
                             <Box sx={{flexGrow: 1}}/>
-                            <Stack
-                                alignItems="center"
-                                direction="row"
-                                spacing={2}
-                                sx={{
-                                    display: {
-                                        md: "block",
-                                        xs: "none"
-                                    }
-                                }}
-                            >
-                                {/*{showConnect && (*/}
-                                {/*    <Button*/}
-                                {/*        // onClick={handleConnectionAdd}*/}
-                                {/*        size="small"*/}
-                                {/*        startIcon={(*/}
-                                {/*            <SvgIcon>*/}
-                                {/*                <UserPlus02Icon/>*/}
-                                {/*            </SvgIcon>*/}
-                                {/*        )}*/}
-                                {/*        variant="outlined"*/}
-                                {/*    >*/}
-                                {/*        Connect*/}
-                                {/*    </Button>*/}
-                                {/*)}*/}
-                                {/*{showPending && (*/}
-                                {/*    <Button*/}
-                                {/*        color="primary"*/}
-                                {/*        // onClick={handleConnectionRemove}*/}
-                                {/*        size="small"*/}
-                                {/*        variant="outlined"*/}
-                                {/*    >*/}
-                                {/*        Pending*/}
-                                {/*    </Button>*/}
-                                {/*)}*/}
-                                <Button
-                                    // component={RouterLink}
-                                    // href={paths.dashboard.chat}
-                                    size="small"
-                                    startIcon={(
-                                        <SvgIcon>
-                                            <MessageChatSquareIcon/>
-                                        </SvgIcon>
-                                    )}
-                                    variant="contained"
-                                >
-                                    Send Message
-                                </Button>
-                            </Stack>
+                            {/*<Button*/}
+                            {/*    size="small"*/}
+                            {/*    startIcon={(*/}
+                            {/*        <SvgIcon>*/}
+                            {/*            <MessageChatSquareIcon/>*/}
+                            {/*        </SvgIcon>*/}
+                            {/*    )}*/}
+                            {/*    sx={{height: 40}}*/}
+                            {/*    variant="contained"*/}
+                            {/*>*/}
+                            {/*    Send Message*/}
+                            {/*</Button>*/}
                             <Tooltip title="More options">
                                 <IconButton>
                                     <SvgIcon>
@@ -315,7 +295,14 @@ export const GroupProfile = () => {
                                     key={tab.value}
                                     label={tab.label}
                                     value={tab.value}
-                                    sx={{mx: {xs: 0, sm: 1, md: 2, lg: 3}}}
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: 'action.hover',
+                                            borderRadius: 1,
+                                        },
+                                        px: 1,
+                                        mx: {xs: 1, sm: 1, md: 2, lg: 2}
+                                    }}
                                 />
                             ))}
                         </Tabs>
@@ -324,6 +311,7 @@ export const GroupProfile = () => {
                             {currentTab === "home" && (
                                 <Grid container justifyContent={"center"} spacing={3}>
                                     <Grid item xs={12} sm={12} md={7} lg={8}>
+                                        <CreatePostPromptCard />
                                         <GroupPostsList groupId={params.groupId!}/>
                                     </Grid>
                                     <Hidden mdDown>
@@ -331,9 +319,7 @@ export const GroupProfile = () => {
                                             <GroupAboutCard group={group!}/>
                                         </Grid>
                                     </Hidden>
-                                </Grid>
-
-                            )}
+                                </Grid>)}
                             {currentTab === "events" && (
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>

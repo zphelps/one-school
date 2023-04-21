@@ -10,6 +10,7 @@ export interface Group {
     isPrivate: boolean;
     creatorID: string;
     createdOn: number;
+    category: string;
     creator: {
         id: string;
         firstName: string;

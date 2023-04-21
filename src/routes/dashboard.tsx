@@ -8,6 +8,9 @@ import {EventDetails} from "../pages/events/event-details";
 import {Groups} from "../pages/groups/list";
 import {GroupProfile} from "../pages/groups/profile";
 import {Conversations} from "../pages/conversations/conversations";
+import {Account} from "../pages/account";
+import {Announcements} from "../pages/announcements/list";
+import {AnnouncementDetails} from "../components/announcements/announcement-details";
 
 export const dashboardRoutes: RouteObject[] = [
     {
@@ -25,11 +28,15 @@ export const dashboardRoutes: RouteObject[] = [
                 element: <Home />
             },
             {
-                path: 'alerts',
+                path: 'announcements',
                 children: [
                     {
                         index: true,
-                        element: <div>Alerts</div>
+                        element: <Announcements />
+                    },
+                    {
+                        path: ':announcementId',
+                        element: <AnnouncementDetails />
                     }
                 ]
             },
@@ -72,15 +79,6 @@ export const dashboardRoutes: RouteObject[] = [
                 path: 'conversations',
                 element: <Conversations />
             },
-            // {
-            //     path: 'conversations',
-            //     children: [
-            //         {
-            //             index: true,
-            //             element: <div>Conversations</div>
-            //         }
-            //     ]
-            // },
             {
                 path: 'forms',
                 children: [
@@ -107,7 +105,11 @@ export const dashboardRoutes: RouteObject[] = [
                         element: <div>Files</div>
                     }
                 ]
-            }
+            },
+            {
+                path: 'settings',
+                element: <Account />
+            },
         ]
     }
 ];

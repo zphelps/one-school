@@ -15,6 +15,7 @@ export const Layout: FC<LayoutProps> = withAuthGuard((props) => {
 
   return (
     <VerticalLayout
+      // @ts-ignore
       sections={sections}
       navColor={settings.navColor}
       {...props}

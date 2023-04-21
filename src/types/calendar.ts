@@ -3,7 +3,8 @@ export interface CalendarEvent {
     group: {
         id: string | undefined;
         name: string | undefined;
-        imageURL: string | undefined;
+        profileImageURL: string | undefined;
+        backgroundImageURL: string | undefined;
         type: string | undefined;
     } | null;
     gameID: string | null;
@@ -13,14 +14,11 @@ export interface CalendarEvent {
         name: string | null;
         format: string | null;
         description: string | null;
+        url: string | null;
     }
     targetIDs: string[];
     public: boolean;
-    attendance: {
-        attending: string[];
-        maybe: string[];
-        notAttending: string[];
-    } | null
+    attendance: Attendance | null;
     allDay: boolean;
     color?: string;
     description: string;
@@ -35,3 +33,20 @@ export type CalendarView =
     | 'timeGridWeek'
     | 'timeGridDay'
     | 'listWeek';
+
+export interface Attendance {
+    id: string;
+    RSVP: {
+        attending: string[];
+        maybe: string[];
+        notAttending: string[];
+        showGuestList: boolean;
+    } | null
+    ticket: {
+        name: string;
+        description: string;
+        price: number;
+        quantity: number;
+        sold: number;
+    } | null
+}

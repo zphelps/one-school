@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, SetStateAction} from "react"
 import {db} from "../../config";
-import {collection, onSnapshot, query, doc, where} from "firebase/firestore";
+import {collection, onSnapshot, query, doc, where, orderBy} from "firebase/firestore";
 
 export const useCollection = (_collection: any, _queries: any[], _orderBy: any[]) => {
     const [documents, setDocuments] = useState(null)
@@ -34,10 +34,10 @@ export const useCollection = (_collection: any, _queries: any[], _orderBy: any[]
                 // @ts-ignore
                 ref = query(ref, where(..._queries))
             }
-            // if (_orderBy) {
-            //     // @ts-ignore
-            //     ref = orderBy(ref, ..._orderBy)
-            // }
+            if (_orderBy.length > 0) {
+                // @ts-ignore
+                ref = query(ref, orderBy(..._orderBy))
+            }
 
             const unsubscribe = onSnapshot(ref, (snapshot) => {
                 // @ts-ignore

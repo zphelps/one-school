@@ -1,7 +1,7 @@
 import 'react'
 import {FC, useCallback, useEffect, useState} from "react";
 import {CalendarEvent} from "../../types/calendar";
-import {Button, ButtonGroup, Paper} from "@mui/material";
+import {Button, ButtonGroup, Paper, Typography, useMediaQuery, useTheme} from "@mui/material";
 import {useAuth} from "../../hooks/use-auth";
 import {useFirestore} from "../../hooks/firebase/useFirestore";
 
@@ -15,12 +15,17 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
     const {updateDocument, response} = useFirestore("events");
     const [attendance, setAttendance] = useState("");
 
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+    const variant = isSmallScreen ? "caption" : "subtitle2";
+
     useEffect(() => {
-        if (event?.attendance?.attending.includes(auth.user?.id as string)) {
+        if (event?.attendance?.RSVP?.attending.includes(auth.user?.id as string)) {
             setAttendance('attending');
-        } else if (event?.attendance?.maybe.includes(auth.user?.id as string)) {
+        } else if (event?.attendance?.RSVP?.maybe.includes(auth.user?.id as string)) {
             setAttendance("maybe");
-        } else if (event?.attendance?.notAttending.includes(auth.user?.id as string)) {
+        } else if (event?.attendance?.RSVP?.notAttending.includes(auth.user?.id as string)) {
             setAttendance("notAttending");
         } else {
             setAttendance("")
@@ -35,27 +40,30 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
 
         await updateDocument(event.id, {
             attendance: {
-                attending: attendance === "attending"
-                    ? event.attendance?.attending.filter(id => id !== auth.user?.id)
-                    : newAttendanceStatus == "attending"
-                        ? [...event.attendance?.attending!, auth.user?.id as string]
-                        : [...event?.attendance?.attending!],
-                maybe: attendance === "maybe"
-                    ? event.attendance?.maybe.filter(id => id !== auth.user?.id)
-                    : newAttendanceStatus == "maybe"
-                        ? [...event.attendance?.maybe!, auth.user?.id as string]
-                        : [...event?.attendance?.maybe!],
-                notAttending: attendance === "notAttending"
-                    ? event.attendance?.notAttending.filter(id => id !== auth.user?.id)
-                    : newAttendanceStatus == "notAttending"
-                        ? [...event.attendance?.notAttending!, auth.user?.id as string]
-                        : [...event?.attendance?.notAttending!],
+                RSVP: {
+                    attending: attendance === "attending"
+                        ? event.attendance?.RSVP?.attending.filter(id => id !== auth.user?.id)
+                        : newAttendanceStatus == "attending"
+                            ? [...event.attendance?.RSVP?.attending!, auth.user?.id as string]
+                            : [...event?.attendance?.RSVP?.attending!],
+                    maybe: attendance === "maybe"
+                        ? event.attendance?.RSVP?.maybe.filter(id => id !== auth.user?.id)
+                        : newAttendanceStatus == "maybe"
+                            ? [...event.attendance?.RSVP?.maybe!, auth.user?.id as string]
+                            : [...event?.attendance?.RSVP?.maybe!],
+                    notAttending: attendance === "notAttending"
+                        ? event.attendance?.RSVP?.notAttending.filter(id => id !== auth.user?.id)
+                        : newAttendanceStatus == "notAttending"
+                            ? [...event.attendance?.RSVP?.notAttending!, auth.user?.id as string]
+                            : [...event?.attendance?.RSVP?.notAttending!],
+                }
             }
         })
     }
 
     return (
         <ButtonGroup
+            sx={{width: "100%"}}
             variant="outlined"
             aria-label="outlined button group"
             disabled={response.isPending}
@@ -68,34 +76,52 @@ export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {
                 sx={{
                     borderRadius: "8px",
                     height: "32px",
+                    width: "100%",
+                    p:0
                 }}
-                variant={event?.attendance?.attending.includes(auth.user?.id as string) ? "contained" : "outlined"}
+                variant={event?.attendance?.RSVP?.attending.includes(auth.user?.id as string) ? "contained" : "outlined"}
             >
-                Going
+                <Typography
+                    variant={variant}
+                >
+                    Going
+                </Typography>
             </Button>
             <Button
                 onClick={async (e) => {
                     await handleAttendanceUpdate("maybe")
                 }}
-                variant={event?.attendance?.maybe.includes(auth.user?.id as string) ? "contained" : "outlined"}
+                variant={event?.attendance?.RSVP?.maybe.includes(auth.user?.id as string) ? "contained" : "outlined"}
                 sx={{
                     borderRadius: "8px",
-                    height: "32px"
+                    height: "32px",
+                    width: "100%",
+                    p:0
                 }}
             >
-                Maybe
+                <Typography
+                    variant={variant}
+                >
+                    Maybe
+                </Typography>
             </Button>
             <Button
                 onClick={async (e) => {
                     await handleAttendanceUpdate("notAttending")
                 }}
-                variant={event?.attendance?.notAttending.includes(auth.user?.id as string) ? "contained" : "outlined"}
+                variant={event?.attendance?.RSVP?.notAttending.includes(auth.user?.id as string) ? "contained" : "outlined"}
                 sx={{
                     borderRadius: "8px",
-                    height: "32px"
+                    height: "32px",
+                    width: "100%",
+                    p:0
                 }}
             >
-                Not Going
+                <Typography
+                    variant={variant}
+                >
+                    Not Going
+                </Typography>
             </Button>
         </ButtonGroup>
     )

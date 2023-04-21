@@ -13,6 +13,7 @@ import {useMounted} from "../../hooks/use-mounted";
 import {GroupListContainer} from "../../sections/groups/group-list-container";
 import {GroupListSearch} from "../../sections/groups/group-list-search";
 import {GroupCard} from "../../components/groups/group-card";
+import GroupCardSkeleton from "../../components/groups/group-skeleton-card";
 
 interface Filters {
     query?: string;
@@ -124,8 +125,6 @@ export const Groups = () => {
     // @ts-ignore
     const groups = useSelector((state) => state.groups.data);
 
-    const currentGroup = useCurrentGroup(groupsStore.groups, dialog.data);
-
     const isMounted = useMounted();
 
     useEffect(() => {
@@ -133,8 +132,29 @@ export const Groups = () => {
                 setGroupsStore({
                     // @ts-ignore
                     groups: groups.filter((group) => {
-                        if (groupsSearch.state.filters.query) {
-                            return group.name.toLowerCase().includes(groupsSearch.state.filters.query.toLowerCase());
+                        if (groupsSearch.state.filters.query
+                            && !group.name.toLowerCase().includes(groupsSearch.state.filters.query.toLowerCase())) {
+                            return false;
+                        }
+                        if(groupsSearch.state.filters.status) {
+                            if(groupsSearch.state.filters.status === 'administration') {
+                                return group.category == 'administration';
+                            } else if(groupsSearch.state.filters.status === 'academic') {
+                                return group.category == 'academic';
+                            } else if(groupsSearch.state.filters.status === 'athletics') {
+                                return group.category == 'athletics';
+                            } else if (groupsSearch.state.filters.status === 'leadership') {
+                                return group.category == 'leadership';
+                            } else if (groupsSearch.state.filters.status === 'theatre') {
+                                return group.category == 'theatre';
+                            } else if (groupsSearch.state.filters.status === 'arts & culture') {
+                                return group.category == 'arts & culture';
+                            } else if (groupsSearch.state.filters.status === 'community') {
+                                return group.category == 'community';
+                            } else if (groupsSearch.state.filters.status === 'college/career') {
+                                return group.category == 'college/career';
+                            }
+                            return false;
                         }
                         return true;
                     }),
@@ -226,6 +246,11 @@ export const Groups = () => {
                                 {groupsStore.groupsCount > 0 && groupsStore.groups.map((group) => (
                                     <Grid key={group.id} item xs={12} sm={6} md={4} lg={3} xl={3} >
                                         <GroupCard group={group}/>
+                                    </Grid>
+                                ))}
+                                {groupsStore.groupsCount === 0 && Array.from({length: 12}).map((_, index) => (
+                                    <Grid key={index} item xs={12} sm={6} md={4} lg={3} xl={3} >
+                                        <GroupCardSkeleton/>
                                     </Grid>
                                 ))}
                             </Grid>

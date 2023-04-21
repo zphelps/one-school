@@ -1,17 +1,35 @@
 import 'react'
 import {FC} from "react";
 import {CalendarEvent} from "../../types/calendar";
-import {Card, Divider, Paper, Stack, Typography} from "@mui/material";
+import {Box, Card, Divider, Paper, Stack, Typography} from "@mui/material";
 
 interface EventLocationProps {
     event?: CalendarEvent;
 }
 export const EventLocationCard: FC<EventLocationProps> = (props) => {
     const { event } = props;
+
+    const GOOGLE_MAPS_API_KEY = 'AIzaSyCGWaK8mKMUW8FZYHDvUQU-aJB5lGnsIHw'; // Replace with your API key
+
+    const getMapImage = (event: CalendarEvent) => {
+        return `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(
+            event.location.name! + event.location.formattedAddress!
+        )}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(
+            event.location.name! + event.location.formattedAddress!
+        )}&key=${GOOGLE_MAPS_API_KEY}`;
+    }
+
+    const openGoogleMaps = (event: CalendarEvent) => {
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location.name! + event.location.formattedAddress!)}`;
+        window.open(url, '_blank');
+    };
+
     return (
         <Card>
             <Stack>
-                {event?.location?.mapImageURL && <img style={{maxHeight: "300px", objectFit: "cover"}} src={event?.location?.mapImageURL!}/>}
+                {event?.location.formattedAddress &&
+                    <img onClick={() => openGoogleMaps(event)} style={{maxHeight: "250px", objectFit: "cover"}} src={getMapImage(event)}/>
+                }
                 <Stack sx={{px:3, pb: 3, pt:2}}>
                     <Typography variant={"subtitle1"}>{event?.location.name}</Typography>
                     <Typography>

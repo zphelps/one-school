@@ -74,32 +74,32 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
       </Box>
       <Divider />
       <Box sx={{ p: 1 }}>
+        {/*<ListItemButton*/}
+        {/*  component={RouterLink}*/}
+        {/*  href={paths.index}*/}
+        {/*  onClick={onClose}*/}
+        {/*  sx={{*/}
+        {/*    borderRadius: 1,*/}
+        {/*    px: 1,*/}
+        {/*    py: 0.5*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <ListItemIcon>*/}
+        {/*    <SvgIcon fontSize="small">*/}
+        {/*      <User03Icon />*/}
+        {/*    </SvgIcon>*/}
+        {/*  </ListItemIcon>*/}
+        {/*  <ListItemText*/}
+        {/*    primary={(*/}
+        {/*      <Typography variant="body1">*/}
+        {/*        Profile*/}
+        {/*      </Typography>*/}
+        {/*    )}*/}
+        {/*  />*/}
+        {/*</ListItemButton>*/}
         <ListItemButton
           component={RouterLink}
-          href={paths.index}
-          onClick={onClose}
-          sx={{
-            borderRadius: 1,
-            px: 1,
-            py: 0.5
-          }}
-        >
-          <ListItemIcon>
-            <SvgIcon fontSize="small">
-              <User03Icon />
-            </SvgIcon>
-          </ListItemIcon>
-          <ListItemText
-            primary={(
-              <Typography variant="body1">
-                Profile
-              </Typography>
-            )}
-          />
-        </ListItemButton>
-        <ListItemButton
-          component={RouterLink}
-          href={paths.index}
+          href={paths.settings}
           onClick={onClose}
           sx={{
             borderRadius: 1,
@@ -120,29 +120,29 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
             )}
           />
         </ListItemButton>
-        <ListItemButton
-          component={RouterLink}
-          href={paths.index}
-          onClick={onClose}
-          sx={{
-            borderRadius: 1,
-            px: 1,
-            py: 0.5
-          }}
-        >
-          <ListItemIcon>
-            <SvgIcon fontSize="small">
-              <CreditCard01Icon />
-            </SvgIcon>
-          </ListItemIcon>
-          <ListItemText
-            primary={(
-              <Typography variant="body1">
-                Billing
-              </Typography>
-            )}
-          />
-        </ListItemButton>
+        {/*<ListItemButton*/}
+        {/*  component={RouterLink}*/}
+        {/*  href={paths.index}*/}
+        {/*  onClick={onClose}*/}
+        {/*  sx={{*/}
+        {/*    borderRadius: 1,*/}
+        {/*    px: 1,*/}
+        {/*    py: 0.5*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <ListItemIcon>*/}
+        {/*    <SvgIcon fontSize="small">*/}
+        {/*      <CreditCard01Icon />*/}
+        {/*    </SvgIcon>*/}
+        {/*  </ListItemIcon>*/}
+        {/*  <ListItemText*/}
+        {/*    primary={(*/}
+        {/*      <Typography variant="body1">*/}
+        {/*        Billing*/}
+        {/*      </Typography>*/}
+        {/*    )}*/}
+        {/*  />*/}
+        {/*</ListItemButton>*/}
       </Box>
       <Divider sx={{ my: '0 !important' }} />
       <Box

@@ -13,7 +13,7 @@ import { TenantSwitch } from '../tenant-switch';
 import { SideNavSection } from './side-nav-section';
 import Logo from "../../../assets/Logo.png";
 
-const SIDE_NAV_WIDTH: number = 260;
+const SIDE_NAV_WIDTH: number = 250;
 
 const useCssVars = (color: NavColor): Record<string, string> => {
   const theme = useTheme();
@@ -49,8 +49,8 @@ const useCssVars = (color: NavColor): Record<string, string> => {
               '--nav-section-title-color': theme.palette.neutral[400],
               '--nav-item-color': theme.palette.text.secondary,
               '--nav-item-hover-bg': theme.palette.action.hover,
-              '--nav-item-active-bg': theme.palette.action.selected,
-              '--nav-item-active-color': theme.palette.text.primary,
+              '--nav-item-active-bg': theme.palette.primary.alpha12!, //theme.palette.action.selected,
+              '--nav-item-active-color': theme.palette.primary.main, //theme.palette.text.primary,
               '--nav-item-disabled-color': theme.palette.neutral[400],
               '--nav-item-icon-color': theme.palette.neutral[400],
               '--nav-item-icon-active-color': theme.palette.primary.main,
@@ -167,6 +167,7 @@ export const SideNav: FC<SideNavProps> = (props) => {
           borderRightColor: 'var(--nav-border-color)',
           borderRightStyle: 'solid',
           borderRightWidth: 1,
+          borderColor: '#eeeeee',
           color: 'var(--nav-color)',
           width: SIDE_NAV_WIDTH
         }

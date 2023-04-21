@@ -177,6 +177,15 @@ export const GroupListSearch: FC<OrderListSearchProps> = (props) => {
             key={tab.value}
             label={tab.label}
             value={tab.value}
+            sx={{
+              px: 1,
+              py: 1,
+              mr: 2,
+              '&:hover': {
+                backgroundColor: 'action.hover',
+                borderRadius: 1,
+              },
+            }}
           />
         ))}
       </Tabs>

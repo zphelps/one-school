@@ -15,9 +15,7 @@ const useMainFeedPosts = () => {
 
     useEffect(() => {
         // @ts-ignore
-        let ref = query(collection(db, "tenants", auth.user.tenantID, "posts"), orderBy("createdAt", "desc"));
-
-        ref = query(ref, where("targetIDs", "array-contains-any", auth.user?.targetMembership));
+        let ref = query(collection(db, "tenants", auth.user.tenantID, "users", auth.user?.id, "posts"), orderBy("createdAt", "desc"));
 
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {

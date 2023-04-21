@@ -11,6 +11,12 @@ export interface User {
     fcmToken?: string;
     isActive: boolean;
     lastActivity?: number;
+    groupsMemberOf: {
+        id: string;
+        name: string;
+        profileImageURL: string;
+        type: string;
+    }[];
 
     [key: string]: any;
 }

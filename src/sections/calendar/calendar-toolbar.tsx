@@ -104,12 +104,12 @@ export const CalendarToolbar: FC<CalendarToolbarProps> = (props) => {
         direction="row"
         spacing={1}
       >
-        <Typography variant="h5">
+        <Typography variant="h4">
           {dateMonth}
         </Typography>
         <Typography
-          sx={{ fontWeight: 400 }}
-          variant="h5"
+          sx={{ fontWeight: 300 }}
+          variant="h4"
         >
           {dateDay}
         </Typography>

@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useState } from "react"
-import {collection, doc, deleteDoc, updateDoc} from "firebase/firestore";
+import {collection, doc, setDoc, deleteDoc, updateDoc} from "firebase/firestore";
 import {db} from "../../config";
 
 
@@ -46,12 +46,12 @@ export const useFirestore = (_collection) => {
 
     // add a document
     // @ts-ignore
-    const addDocument = async (doc) => {
+    const addDocument = async (document) => {
         // @ts-ignore
         dispatch({ type: 'IS_PENDING' })
 
         try {
-            const addedDocument = await doc(ref, doc.id).set({ ...doc })
+            const addedDocument = await setDoc(doc(ref, document.id), { ...document })
             dispatchIfNotCancelled({ type: 'ADDED_DOCUMENT', payload: addedDocument })
         }
         catch (err) {
@@ -81,7 +81,7 @@ export const useFirestore = (_collection) => {
 
         try {
             const updatedDocument = await updateDoc(doc(ref, id), updatedFields)
-            dispatchIfNotCancelled({ type: 'UPDATED_DOCUMENT', payloa: updateDocument })
+            dispatchIfNotCancelled({ type: 'UPDATED_DOCUMENT', payload: updateDocument })
             return updatedDocument
         }
         catch (err) {

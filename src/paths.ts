@@ -5,11 +5,9 @@ export const paths = {
     register: '/auth/register'
   },
   home: '/home',
-  alerts: {
-    index: '/alerts',
-    create: '/alerts/create',
-    edit: '/alerts/:alertId/edit',
-    details: '/alerts/:alertId'
+  announcements: {
+    index: '/announcements',
+    create: '/announcements/create',
   },
   calendar: '/calendar',
   events: '/events',
@@ -23,4 +21,5 @@ export const paths = {
   forms: '/forms',
   payments: '/payments',
   files: '/files',
+    settings: '/settings',
 };
