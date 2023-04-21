@@ -2,8 +2,6 @@ import type {ChangeEvent, MouseEvent} from "react";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import {Box, Button, Container, Divider, Grid, Stack, SvgIcon, Typography} from "@mui/material";
-import {CalendarEvent} from "../../types/calendar";
-import useCalendarEvents from "../../hooks/events/use-calendar-events";
 import {useSelector} from "react-redux";
 import {Group} from "../../types/group";
 import useGroups from "../../hooks/groups/use-groups";
