@@ -8,7 +8,6 @@ export interface Group {
     type: string;
     profileImageURL: string | null;
     isPrivate: boolean;
-    creatorID: string;
     createdOn: number;
     category: string;
     creator: {

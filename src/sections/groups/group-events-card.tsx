@@ -20,7 +20,7 @@ import {
 import {Seo} from "../../components/seo";
 import {useSelector} from "react-redux";
 import useGroupEvents from "../../hooks/events/use-group-events";
-import {CalendarEvent} from "../../types/calendar";
+import {Group} from "../../types/calendar";
 import {EventListTile} from "../../components/events/event-list-tile";
 
 type TabValue = 'upcoming' | 'past';
@@ -66,14 +66,14 @@ export const GroupEventsCard: FC<GroupEventsCardProps> = (props) => {
 
     const upcomingEvents = useMemo(() => {
         if (events) {
-            return events.filter((event: CalendarEvent) => event.end >= today);
+            return events.filter((event: Group) => event.end >= today);
         }
         return [];
     }, [events]);
 
     const pastEvents = useMemo(() => {
         if (events) {
-            return events.filter((event: CalendarEvent) => event.end < today);
+            return events.filter((event: Group) => event.end < today);
         }
         return [];
     }, [events]);
@@ -117,12 +117,12 @@ export const GroupEventsCard: FC<GroupEventsCardProps> = (props) => {
                 <Divider />
                 <Box sx={{mt: 3}}>
                     {currentTab === 'upcoming' && (
-                        upcomingEvents.map((event: CalendarEvent) => (
+                        upcomingEvents.map((event: Group) => (
                             <EventListTile key={event.id} event={event}/>
                         ))
                     )}
                     {currentTab === 'past' && (
-                        pastEvents.map((event: CalendarEvent) => (
+                        pastEvents.map((event: Group) => (
                             <EventListTile key={event.id} event={event}/>
                         ))
                     )}

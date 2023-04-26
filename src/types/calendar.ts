@@ -1,4 +1,4 @@
-export interface CalendarEvent {
+export interface Group {
     id: string;
     group: {
         id: string | undefined;

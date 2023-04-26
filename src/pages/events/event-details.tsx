@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useDocument} from "../../hooks/firebase/useDocument";
 import {Box, Container, Grid, Paper, Stack, Typography, useTheme} from "@mui/material";
-import {CalendarEvent} from "../../types/calendar";
+import {Group} from "../../types/calendar";
 import {format} from "date-fns";
 import {EventDetailsCard} from "../../sections/events/event-details-card";
 import {EventHeadlineCard} from "../../sections/events/event-headline-card";
@@ -18,7 +18,7 @@ import {BadURL} from "../404";
 export const EventDetails = () => {
     const params = useParams<{ eventId: string }>()
     const {document, error, isPending} = useDocument('events', params.eventId!)
-    const [event, setEvent] = useState<CalendarEvent>();
+    const [event, setEvent] = useState<Group>();
 
     useEffect(() => {
         if (document) {

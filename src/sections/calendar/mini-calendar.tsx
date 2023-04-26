@@ -18,7 +18,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import {format} from "date-fns";
 import {PreviewDialogData, useCurrentEvent} from "../../pages/calendar/calendar";
-import {CalendarEvent} from "../../types/calendar";
+import {Group} from "../../types/calendar";
 import { Dayjs } from 'dayjs';
 import {CalendarEventPreviewDialog} from "./calendar-event-preview-dialog";
 import {useDialog} from "../../hooks/use-dialog";
@@ -51,7 +51,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
         useCalendarEvents(startDate, endDate);
     }
 
-    const [filteredEvents, setFilteredEvents] = useState<CalendarEvent[]>([])
+    const [filteredEvents, setFilteredEvents] = useState<Group[]>([])
 
     const previewDialog = useDialog<PreviewDialogData>();
     const updatingEvent = useCurrentEvent(events, previewDialog.data);
@@ -75,7 +75,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
 
     useEffect(() => {
         if(!events || Object.keys(events).length == 0) return;
-        setFilteredEvents(events.filter((event: CalendarEvent) => {
+        setFilteredEvents(events.filter((event: Group) => {
             if(event.start == null || event.end == null) return false;
             const start = format(event.start, 'yyyy-MM-dd')
             const end = format(event.end, 'yyyy-MM-dd')
@@ -86,7 +86,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
 
     const countEventsOnDate = useCallback((date: number): number => {
         if(!events || Object.keys(events).length == 0) return 0;
-        return events.filter((event: CalendarEvent) => {
+        return events.filter((event: Group) => {
             const endOfDay = new Date(date);
             endOfDay.setHours(23);
             endOfDay.setMinutes(59);

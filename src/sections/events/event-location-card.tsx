@@ -1,17 +1,17 @@
 import 'react'
 import {FC} from "react";
-import {CalendarEvent} from "../../types/calendar";
+import {Group} from "../../types/calendar";
 import {Box, Card, Divider, Paper, Stack, Typography} from "@mui/material";
 
 interface EventLocationProps {
-    event?: CalendarEvent;
+    event?: Group;
 }
 export const EventLocationCard: FC<EventLocationProps> = (props) => {
     const { event } = props;
 
     const GOOGLE_MAPS_API_KEY = 'AIzaSyCGWaK8mKMUW8FZYHDvUQU-aJB5lGnsIHw'; // Replace with your API key
 
-    const getMapImage = (event: CalendarEvent) => {
+    const getMapImage = (event: Group) => {
         return `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(
             event.location.name! + event.location.formattedAddress!
         )}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(
@@ -19,7 +19,7 @@ export const EventLocationCard: FC<EventLocationProps> = (props) => {
         )}&key=${GOOGLE_MAPS_API_KEY}`;
     }
 
-    const openGoogleMaps = (event: CalendarEvent) => {
+    const openGoogleMaps = (event: Group) => {
         const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location.name! + event.location.formattedAddress!)}`;
         window.open(url, '_blank');
     };

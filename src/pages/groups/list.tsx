@@ -12,6 +12,8 @@ import {GroupListContainer} from "../../sections/groups/group-list-container";
 import {GroupListSearch} from "../../sections/groups/group-list-search";
 import {GroupCard} from "../../components/groups/group-card";
 import GroupCardSkeleton from "../../components/groups/group-skeleton-card";
+import {PostDialog} from "../../components/feed/create-post-dialog";
+import {CreateGroupDialog} from "../../sections/groups/create-group-dialog";
 
 interface Filters {
     query?: string;
@@ -24,8 +26,6 @@ interface GroupsSearchState {
     filters: Filters;
     page: number;
     rowsPerPage: number;
-    sortBy?: string;
-    sortDir?: SortDir;
 }
 
 const useGroupsSearch = () => {
@@ -36,8 +36,6 @@ const useGroupsSearch = () => {
         },
         page: 0,
         rowsPerPage: 5,
-        sortBy: "createdAt",
-        sortDir: "desc"
     });
 
     const handleFiltersChange = useCallback(
@@ -45,16 +43,6 @@ const useGroupsSearch = () => {
             setState((prevState) => ({
                 ...prevState,
                 filters
-            }));
-        },
-        []
-    );
-
-    const handleSortChange = useCallback(
-        (sortDir: SortDir): void => {
-            setState((prevState) => ({
-                ...prevState,
-                sortDir
             }));
         },
         []
@@ -82,7 +70,6 @@ const useGroupsSearch = () => {
 
     return {
         handleFiltersChange,
-        handleSortChange,
         handlePageChange,
         handleRowsPerPageChange,
         state
@@ -110,8 +97,14 @@ const useCurrentGroup = (groups: Group[], groupID?: string): Group | undefined =
 export const Groups = () => {
     const rootRef = useRef<HTMLDivElement | null>(null);
     const groupsSearch = useGroupsSearch();
-    // const groupsStore = useGroupsStore(groupsSearch.state);
-    const dialog = useDialog<string>();
+    const createDialog = useDialog();
+
+    const handleAddClick = useCallback(
+        (): void => {
+            createDialog.handleOpen();
+        },
+        [createDialog.handleOpen]
+    );
 
     useGroups();
 
@@ -135,22 +128,22 @@ export const Groups = () => {
                             return false;
                         }
                         if(groupsSearch.state.filters.status) {
-                            if(groupsSearch.state.filters.status === 'administration') {
-                                return group.category == 'administration';
-                            } else if(groupsSearch.state.filters.status === 'academic') {
-                                return group.category == 'academic';
-                            } else if(groupsSearch.state.filters.status === 'athletics') {
-                                return group.category == 'athletics';
-                            } else if (groupsSearch.state.filters.status === 'leadership') {
-                                return group.category == 'leadership';
-                            } else if (groupsSearch.state.filters.status === 'theatre') {
-                                return group.category == 'theatre';
-                            } else if (groupsSearch.state.filters.status === 'arts & culture') {
-                                return group.category == 'arts & culture';
-                            } else if (groupsSearch.state.filters.status === 'community') {
-                                return group.category == 'community';
-                            } else if (groupsSearch.state.filters.status === 'college/career') {
-                                return group.category == 'college/career';
+                            if(groupsSearch.state.filters.status === 'Administration') {
+                                return group.category == 'Administration';
+                            } else if(groupsSearch.state.filters.status === 'Academic') {
+                                return group.category == 'Academic';
+                            } else if(groupsSearch.state.filters.status === 'Athletics') {
+                                return group.category == 'Athletics';
+                            } else if (groupsSearch.state.filters.status === 'Leadership') {
+                                return group.category == 'Leadership';
+                            } else if (groupsSearch.state.filters.status === 'Theatre') {
+                                return group.category == 'Theatre';
+                            } else if (groupsSearch.state.filters.status === 'Arts & Culture') {
+                                return group.category == 'Arts & Culture';
+                            } else if (groupsSearch.state.filters.status === 'Community') {
+                                return group.category == 'Community';
+                            } else if (groupsSearch.state.filters.status === 'College/Career') {
+                                return group.category == 'College/Career';
                             }
                             return false;
                         }
@@ -161,20 +154,6 @@ export const Groups = () => {
             }
         },
         [groupsSearch.state, groups]
-    );
-
-    const handleOrderOpen = useCallback(
-        (orderId: string): void => {
-            // Close drawer if is the same order
-
-            if (dialog.open && dialog.data === orderId) {
-                dialog.handleClose();
-                return;
-            }
-
-            dialog.handleOpen(orderId);
-        },
-        [dialog]
     );
 
     return (
@@ -202,7 +181,7 @@ export const Groups = () => {
                         top: 0,
                     }}
                 >
-                    <GroupListContainer open={dialog.open}>
+                    <GroupListContainer>
                         <Container maxWidth={'xl'}>
                             <Box sx={{py: 2}}>
                                 <Stack
@@ -224,6 +203,7 @@ export const Groups = () => {
                                                 </SvgIcon>
                                             )}
                                             variant="contained"
+                                            onClick={handleAddClick}
                                         >
                                             Create
                                         </Button>
@@ -233,9 +213,6 @@ export const Groups = () => {
                             <Divider/>
                             <GroupListSearch
                                 onFiltersChange={groupsSearch.handleFiltersChange}
-                                onSortChange={groupsSearch.handleSortChange}
-                                sortBy={groupsSearch.state.sortBy}
-                                sortDir={groupsSearch.state.sortDir}
                             />
                         </Container>
                         <Divider/>
@@ -253,20 +230,15 @@ export const Groups = () => {
                                 ))}
                             </Grid>
                         </Container>
-
-
-                        {/*<GroupListTable*/}
-                        {/*  count={groupsStore.groupsCount}*/}
-                        {/*  items={groupsStore.groups}*/}
-                        {/*  onPageChange={groupsSearch.handlePageChange}*/}
-                        {/*  onRowsPerPageChange={groupsSearch.handleRowsPerPageChange}*/}
-                        {/*  onSelect={handleOrderOpen}*/}
-                        {/*  page={groupsSearch.state.page}*/}
-                        {/*  rowsPerPage={groupsSearch.state.rowsPerPage}*/}
-                        {/*/>*/}
                     </GroupListContainer>
                 </Box>
             </Box>
+            <CreateGroupDialog
+                action="create"
+                onAddComplete={createDialog.handleClose}
+                onClose={createDialog.handleClose}
+                open={createDialog.open}
+            />
         </>
     );
 };

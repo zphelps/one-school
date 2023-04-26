@@ -25,7 +25,7 @@ import {
 import {DateTimePicker} from "@mui/x-date-pickers";
 // import {useDispatch} from 'src/store';
 // import {thunks} from 'src/thunks/calendar';
-import type {CalendarEvent} from "../../types/calendar";
+import type {Group} from "../../types/calendar";
 import {Calendar, Lock01, LockUnlocked01, MarkerPin01} from "@untitled-ui/icons-react";
 import {useNavigate} from "react-router-dom";
 import {paths} from "../../paths";
@@ -33,7 +33,7 @@ import {RouterLink} from "../../components/router-link";
 import {EventDetailsTiles} from "../events/event-details-tiles";
 
 interface CalendarEventPreviewDialogProps {
-    event?: CalendarEvent;
+    event?: Group;
     onClose?: () => void;
     onDeleteComplete?: () => void;
     open?: boolean;

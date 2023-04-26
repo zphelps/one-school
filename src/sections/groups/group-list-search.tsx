@@ -22,15 +22,15 @@ interface Filters {
   status?: string;
 }
 
-type TabValue = 'all'
-    | 'administration'
-    | 'academic'
-    | 'athletics'
-    | 'leadership'
-    | 'theatre'
-    | 'arts & culture'
-    | 'community'
-    | 'college/career';
+type TabValue = 'All'
+    | 'Administration'
+    | 'Academic'
+    | 'Athletics'
+    | 'Leadership'
+    | 'Theatre'
+    | 'Arts & Culture'
+    | 'Community'
+    | 'College/Career';
 
 interface TabOption {
   label: string;
@@ -40,39 +40,39 @@ interface TabOption {
 const tabOptions: TabOption[] = [
   {
     label: 'All',
-    value: 'all'
+    value: 'All'
   },
   {
     label: 'Administration',
-    value: 'administration'
+    value: 'Administration'
   },
   {
     label: 'Academic',
-    value: 'academic'
+    value: 'Academic'
   },
   {
     label: 'Athletics',
-    value: 'athletics'
+    value: 'Athletics'
   },
   {
     label: 'Leadership',
-    value: 'leadership'
+    value: 'Leadership'
   },
   {
     label: 'Theatre',
-    value: 'theatre'
+    value: 'Theatre'
   },
   {
     label: 'Arts & Culture',
-    value: 'arts & culture'
+    value: 'Arts & Culture'
   },
   {
     label: 'Community',
-    value: 'community'
+    value: 'Community'
   },
   {
     label: 'College/Career',
-    value: 'college/career'
+    value: 'College/Career'
   },
 ];
 
@@ -97,19 +97,14 @@ const sortOptions: SortOption[] = [
 interface OrderListSearchProps {
   onFiltersChange?: (filters: Filters) => void;
   onSortChange?: (sort: SortDir) => void;
-  sortBy?: string;
-  sortDir?: 'asc' | 'desc';
 }
 
 export const GroupListSearch: FC<OrderListSearchProps> = (props) => {
   const {
     onFiltersChange,
-    onSortChange,
-    // sortBy = 'createdAt',
-    sortDir = 'asc'
   } = props;
   const queryRef = useRef<HTMLInputElement | null>(null);
-  const [currentTab, setCurrentTab] = useState<TabValue>('all');
+  const [currentTab, setCurrentTab] = useState<TabValue>('All');
   const [filters, setFilters] = useState<Filters>({
     query: undefined,
     status: undefined
@@ -132,7 +127,7 @@ export const GroupListSearch: FC<OrderListSearchProps> = (props) => {
   const handleTabsChange = useCallback(
     (event: ChangeEvent<{}>, tab: TabValue): void => {
       setCurrentTab(tab);
-      const status = tab === 'all' ? undefined : tab;
+      const status = tab === 'All' ? undefined : tab;
 
       setFilters((prevState) => ({
         ...prevState,
@@ -152,14 +147,6 @@ export const GroupListSearch: FC<OrderListSearchProps> = (props) => {
       }));
     },
     []
-  );
-
-  const handleSortChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>): void => {
-      const sortDir = event.target.value as SortDir;
-      onSortChange?.(sortDir);
-    },
-    [onSortChange]
   );
 
   return (
@@ -265,6 +252,4 @@ export const GroupListSearch: FC<OrderListSearchProps> = (props) => {
 GroupListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
-  sortBy: PropTypes.string,
-  sortDir: PropTypes.oneOf<SortDir>(['asc', 'desc'])
 };
