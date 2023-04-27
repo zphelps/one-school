@@ -1,5 +1,5 @@
 import 'react'
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 import {FC} from "react";
 import {Box, Divider, Paper, Stack, Typography, useTheme} from "@mui/material";
 import {format} from "date-fns";
@@ -11,7 +11,7 @@ import {EventAttendanceForm} from "../../sections/events/event-attendance-form";
 import { RouterLink } from '../router-link';
 
 export interface EventListTileProps {
-    event?: Group,
+    event?: Event,
 }
 
 export const EventListTile: FC<EventListTileProps> = (props) => {

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {Status} from "../../utils/status";
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 
 const groupEvents = createSlice({
     name: "groupEventsSlice",
@@ -15,7 +15,7 @@ const groupEvents = createSlice({
             const groupID = action.payload[0].group.id;
 
             // @ts-ignore
-            const groupEvents = state.data[groupID] as Group[];
+            const groupEvents = state.data[groupID] as Event[];
 
             if(!groupEvents) {
                 state.data = {
@@ -24,7 +24,7 @@ const groupEvents = createSlice({
                 }
             } else {
                 // Create a hashmap of the updated events, using the event IDs as keys
-                const updatedEventsMap = new Map(action.payload.map((event: Group) => [event.id, event]));
+                const updatedEventsMap = new Map(action.payload.map((event: Event) => [event.id, event]));
 
                 // Iterate through the old array of events
                 for (let i = 0; i < groupEvents.length; i++) {
@@ -33,7 +33,7 @@ const groupEvents = createSlice({
 
                     // If there's an updated version, replace the old event with the updated one
                     if (updatedEvent) {
-                        groupEvents[i] = updatedEvent as Group;
+                        groupEvents[i] = updatedEvent as Event;
                     }
 
                 }

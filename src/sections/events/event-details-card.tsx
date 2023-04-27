@@ -1,11 +1,11 @@
 import 'react'
 import {Card, Paper, Stack, Typography} from "@mui/material";
 import {EventDetailsTiles} from "./event-details-tiles";
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 import {FC} from "react";
 
 interface EventAboutCardProps {
-    event?: Group;
+    event?: Event;
 }
 export const EventDetailsCard: FC<EventAboutCardProps> = (props) => {
     const { event } = props;

@@ -1,4 +1,4 @@
-export interface Group {
+export interface Event {
     id: string;
     group: {
         id: string | undefined;

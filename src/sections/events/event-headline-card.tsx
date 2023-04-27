@@ -1,13 +1,13 @@
 import 'react'
 import {Box, Button, Card, Paper, Stack, SvgIcon, Typography, useTheme} from "@mui/material";
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 import {FC} from "react";
 import {format} from "date-fns";
 import {EventAttendanceForm} from "./event-attendance-form";
 import {Ticket01} from "@untitled-ui/icons-react";
 
 interface EventHeadlineCardProps {
-    event?: Group;
+    event?: Event;
 }
 
 export const EventHeadlineCard: FC<EventHeadlineCardProps> = (props) => {

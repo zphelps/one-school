@@ -1,12 +1,12 @@
 import 'react'
 import {FC, useCallback, useEffect, useState} from "react";
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 import {Button, ButtonGroup, Paper, Typography, useMediaQuery, useTheme} from "@mui/material";
 import {useAuth} from "../../hooks/use-auth";
 import {useFirestore} from "../../hooks/firebase/useFirestore";
 
 interface EventAttendanceFormProps {
-    event?: Group;
+    event?: Event;
 }
 
 export const EventAttendanceForm: FC<EventAttendanceFormProps> = (props) => {

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {Status} from "../../utils/status";
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 
 const calendarEvents = createSlice({
     name: "eventsSlice",
@@ -13,7 +13,7 @@ const calendarEvents = createSlice({
 
             const uniqueIds = new Set<string>();
 
-            state.data = state.data.concat(action.payload).filter((event: Group) => {
+            state.data = state.data.concat(action.payload).filter((event: Event) => {
                 if (!uniqueIds.has(event.id)) {
                     uniqueIds.add(event.id);
                     return true;

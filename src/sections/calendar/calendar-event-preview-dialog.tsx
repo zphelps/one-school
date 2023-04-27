@@ -1,39 +1,24 @@
 import type {FC} from "react";
-import {useCallback, useMemo} from "react";
+import {useCallback} from "react";
 import PropTypes from "prop-types";
-import toast from "react-hot-toast";
-import {addMinutes, format} from "date-fns";
-import * as Yup from "yup";
-import {useFormik} from "formik";
 import Trash02Icon from "@untitled-ui/icons-react/build/esm/Trash02";
 import {
     Box,
     Button,
     Dialog,
     Divider,
-    FormControlLabel,
-    FormHelperText,
     IconButton,
-    Link,
     Stack,
     SvgIcon,
-    Switch,
-    TextField,
-    TextFieldProps,
-    Typography, useTheme
+    Typography,
 } from "@mui/material";
-import {DateTimePicker} from "@mui/x-date-pickers";
-// import {useDispatch} from 'src/store';
-// import {thunks} from 'src/thunks/calendar';
-import type {Group} from "../../types/calendar";
-import {Calendar, Lock01, LockUnlocked01, MarkerPin01} from "@untitled-ui/icons-react";
-import {useNavigate} from "react-router-dom";
 import {paths} from "../../paths";
 import {RouterLink} from "../../components/router-link";
 import {EventDetailsTiles} from "../events/event-details-tiles";
+import {Event} from "../../types/calendar";
 
 interface CalendarEventPreviewDialogProps {
-    event?: Group;
+    event?: Event;
     onClose?: () => void;
     onDeleteComplete?: () => void;
     open?: boolean;
@@ -46,8 +31,6 @@ export const CalendarEventPreviewDialog: FC<CalendarEventPreviewDialogProps> = (
         onDeleteComplete,
         open = false,
     } = props;
-    const theme = useTheme();
-    const navigate = useNavigate();
 
     const handleDelete = useCallback(
         async (): Promise<void> => {

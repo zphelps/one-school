@@ -240,7 +240,7 @@ export const Announcements = () => {
                         top: 0,
                     }}
                 >
-                    <GroupListContainer open={dialog.open}>
+                    <GroupListContainer>
                         <Container maxWidth={'xl'}>
                             <Box sx={{py: 2}}>
                                 <Stack

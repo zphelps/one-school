@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
 import Calendar from '@fullcalendar/react';
 import { Box, Card, Container, Stack, Theme, useMediaQuery } from '@mui/material';
-import {Group, CalendarView} from "../../types/calendar";
+import {Event, CalendarView} from "../../types/calendar";
 import {useDispatch, useSelector} from "react-redux";
 import {useDialog} from "../../hooks/use-dialog";
 import {Seo} from "../../components/seo";
@@ -33,7 +33,7 @@ interface UpdateDialogData {
     eventId?: string;
 }
 
-export const useEvents = (): Group[] => {
+export const useEvents = (): Event[] => {
     useCalendarEvents(undefined, undefined);
     // @ts-ignore
     const events = useSelector((state) => state.calendarEvents.data);
@@ -41,11 +41,11 @@ export const useEvents = (): Group[] => {
 };
 
 export const useCurrentEvent = (
-    events: Group[],
+    events: Event[],
     dialogData?: UpdateDialogData
-): Group | undefined => {
+): Event | undefined => {
     return useMemo(
-        (): Group | undefined => {
+        (): Event | undefined => {
             if (!dialogData) {
                 return undefined;
             }

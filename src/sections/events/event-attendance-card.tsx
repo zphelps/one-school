@@ -1,11 +1,11 @@
 import 'react'
 import {FC} from "react";
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 import {Card, Divider, Paper, Stack, Typography} from "@mui/material";
 import {EventAttendanceForm} from "./event-attendance-form";
 
 interface EventAttendanceProps {
-    event?: Group;
+    event?: Event;
 }
 export const EventAttendanceCard: FC<EventAttendanceProps> = (props) => {
     const {event} = props;

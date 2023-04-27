@@ -2,11 +2,11 @@ import 'react'
 import {Box, Divider, Paper, Stack, SvgIcon, Typography, useTheme} from "@mui/material";
 import {Calendar, Lock01, LockUnlocked01, MarkerPin01} from "@untitled-ui/icons-react";
 import {format} from "date-fns";
-import {Group} from "../../types/calendar";
+import {Event} from "../../types/calendar";
 import {FC} from "react";
 
 interface EventAboutTilesProps {
-    event?: Group;
+    event?: Event;
 }
 export const EventDetailsTiles: FC<EventAboutTilesProps> = (props) => {
     const { event } = props;

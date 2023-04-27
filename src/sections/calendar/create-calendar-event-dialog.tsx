@@ -27,7 +27,7 @@ import {
     TextFieldProps,
     Typography
 } from "@mui/material";
-import type {Attendance, Group} from "../../types/calendar";
+import type {Attendance, Event} from "../../types/calendar";
 import {DateTimePicker} from "@mui/x-date-pickers";
 import {v4 as uuidv4} from "uuid";
 import {enumToArray} from "../../utils/enum";
@@ -117,7 +117,7 @@ interface Values {
 }
 
 const useInitialValues = (
-    event?: Group,
+    event?: Event,
 ): Values => {
     return useMemo(
         (): Values => {
@@ -174,7 +174,7 @@ type Action = "create" | "update"
 
 interface CalendarEventDialogProps {
     action?: Action;
-    event?: Group;
+    event?: Event;
     onAddComplete?: () => void;
     onClose?: () => void;
     onDeleteComplete?: () => void;

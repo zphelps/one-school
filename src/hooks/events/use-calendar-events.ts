@@ -5,7 +5,6 @@ import {db} from "../../config";
 import {useAuth} from "../use-auth";
 import {Status} from "../../utils/status";
 import {setCalendarEvents, setCalendarEventsStatus} from "../../slices/events/calendar-events";
-import {Group} from "../../types/calendar";
 
 const useCalendarEvents = (start?: number, end?: number) => {
     const dispatch = useDispatch();
