@@ -7,6 +7,7 @@ import groupEvents from "../slices/events/group-events"
 import groupsReducer from "../slices/groups/groups"
 import groupMembersReducer from "../slices/members/group-members"
 import conversationsReducer from "../slices/conversations/conversations"
+import paymentsReducer from "../slices/payments/payments"
 
 export const store = configureStore({
     reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
         groups: groupsReducer,
         groupMembers: groupMembersReducer,
         conversations: conversationsReducer,
+        payments: paymentsReducer,
     },
 })

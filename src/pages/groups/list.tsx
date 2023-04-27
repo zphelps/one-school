@@ -81,19 +81,6 @@ interface GroupsStoreState {
     groupsCount: number;
 }
 
-const useCurrentGroup = (groups: Group[], groupID?: string): Group | undefined => {
-    return useMemo(
-        (): Group | undefined => {
-            if (!groupID) {
-                return undefined;
-            }
-
-            return groups.find((group) => group.id === groupID);
-        },
-        [groups, groupID]
-    );
-};
-
 export const Groups = () => {
     const rootRef = useRef<HTMLDivElement | null>(null);
     const groupsSearch = useGroupsSearch();

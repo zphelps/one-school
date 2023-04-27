@@ -11,6 +11,7 @@ import {Conversations} from "../pages/conversations/conversations";
 import {Account} from "../pages/account";
 import {Announcements} from "../pages/announcements/list";
 import {AnnouncementDetails} from "../components/announcements/announcement-details";
+import {PaymentsList} from "../pages/payments/list";
 
 export const dashboardRoutes: RouteObject[] = [
     {
@@ -93,7 +94,7 @@ export const dashboardRoutes: RouteObject[] = [
                 children: [
                     {
                         index: true,
-                        element: <div>Payments</div>
+                        element: <PaymentsList/>
                     }
                 ]
             },
