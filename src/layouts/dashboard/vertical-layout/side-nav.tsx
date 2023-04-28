@@ -12,6 +12,7 @@ import type { Section } from '../config';
 import { TenantSwitch } from '../tenant-switch';
 import { SideNavSection } from './side-nav-section';
 import Logo from "../../../assets/Logo.png";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 
 const SIDE_NAV_WIDTH: number = 250;
 
@@ -201,7 +202,7 @@ export const SideNav: FC<SideNavProps> = (props) => {
               OneSchool
             </Typography>
           </Stack>
-          <Divider sx={{ height: 2, mt: 3, mb: 2.5, background: (theme) => theme.palette.grey.A200 }} />
+          <Divider sx={{ height: 2, mt: 3, mb: 2.5, background: (theme) => theme.palette.grey.A100 }} />
           <Stack
             component="nav"
             spacing={2}
@@ -210,6 +211,17 @@ export const SideNav: FC<SideNavProps> = (props) => {
               px: 2
             }}
           >
+            <Button
+                startIcon={(
+                    <SvgIcon>
+                      <PlusIcon/>
+                    </SvgIcon>
+                )}
+                variant="contained"
+            >
+              Create
+            </Button>
+            <Divider sx={{ height: 2, mt: 3, mb: 2.5, background: (theme) => theme.palette.grey.A100 }} />
             {sections.map((section, index) => (
               <SideNavSection
                 items={section.items}

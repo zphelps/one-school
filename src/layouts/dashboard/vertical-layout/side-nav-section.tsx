@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Stack } from '@mui/material';
+import {Box, Divider, Stack} from "@mui/material";
 import { SideNavItem } from './side-nav-item';
 
 interface Item {
@@ -131,6 +131,7 @@ export const SideNavSection: FC<SideNavSectionProps> = (props) => {
         </Box>
       )}
       {renderItems({ items, pathname })}
+      <Divider sx={{ height: 1, mt: 4, mb: 3.5, background: (theme) => theme.palette.grey.A100 }} />
     </Stack>
   );
 };

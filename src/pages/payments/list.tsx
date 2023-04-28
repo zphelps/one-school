@@ -119,7 +119,7 @@ export const PaymentsList = () => {
         payments: [],
         paymentsCount: 0
     });
-    const currentOrder = useCurrentPayment(paymentsStore.payments, dialog.data);
+    const currentPayment = useCurrentPayment(paymentsStore.payments, dialog.data);
 
     // @ts-ignore
     const payments = useSelector((state) => state.payments.data);
@@ -230,7 +230,7 @@ export const PaymentsList = () => {
                         container={rootRef.current}
                         onClose={dialog.handleClose}
                         open={dialog.open}
-                        payment={currentOrder}
+                        payment={currentPayment}
                     />
                 </Box>
             </Box>

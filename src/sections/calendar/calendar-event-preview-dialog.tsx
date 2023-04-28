@@ -1,5 +1,5 @@
 import type {FC} from "react";
-import {useCallback} from "react";
+import {useCallback, useEffect} from "react";
 import PropTypes from "prop-types";
 import Trash02Icon from "@untitled-ui/icons-react/build/esm/Trash02";
 import {
@@ -23,6 +23,20 @@ interface CalendarEventPreviewDialogProps {
     onDeleteComplete?: () => void;
     open?: boolean;
 }
+
+const cacheImages = async (srcArray: string[]) => {
+    const promises = srcArray.map((src) => {
+        return new Promise<void>(function (resolve, reject) {
+            const img = new Image();
+            img.src = src;
+            // @ts-ignore
+            img.onload = resolve();
+            // @ts-ignore
+            img.onerror = reject();
+        })
+    });
+    await Promise.all(promises);
+};
 
 export const CalendarEventPreviewDialog: FC<CalendarEventPreviewDialogProps> = (props) => {
     const {
@@ -49,6 +63,10 @@ export const CalendarEventPreviewDialog: FC<CalendarEventPreviewDialogProps> = (
         },
         [event, onDeleteComplete]
     );
+
+    useEffect(() => {
+        cacheImages([event?.imageURL!]);
+    }, [event]);
 
     return (
         <Dialog

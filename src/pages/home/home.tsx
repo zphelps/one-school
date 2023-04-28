@@ -4,12 +4,14 @@ import {PostCard} from "../../components/feed/post-card";
 import {useSelector} from "react-redux";
 import useMainFeedPosts from "../../hooks/posts/use-main-feed-posts";
 import {Status} from "../../utils/status";
-import {Button, Container, Grid} from "@mui/material";
+import {Button, Container, Grid, Stack, SvgIcon} from "@mui/material";
 import {PostDialog} from "../../components/feed/create-post-dialog";
 import {useDialog} from "../../hooks/use-dialog";
 import {useCallback, useMemo} from "react";
 import {MiniCalendar} from "../../sections/calendar/mini-calendar";
 import {PostCardSkeleton} from "../../components/feed/post-skeleton-card";
+import {UpcomingPaymentsCard} from "../../components/payments/upcoming-payments-card";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 
 export interface PreviewPostDialogData {
     postID?: string;
@@ -55,9 +57,9 @@ export const Home = () => {
     return (
         <>
             <Seo title="Home | OneSchool"/>
-            <Button onClick={handleAddClick}>New Post</Button>
+            {/*<Button onClick={handleAddClick}>New Post</Button>*/}
             <Container maxWidth={'xl'}>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{mt: 4}}>
                     {status == Status.SUCCESS && <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
                         {posts && (
                             posts.map((post: Post) => (
@@ -75,7 +77,11 @@ export const Home = () => {
                         {Array.from({length: 25}).map((_, i) => <PostCardSkeleton key={i}/>)}
                     </Grid>}
                     <Grid item xs={12} sm={12} md={5} lg={5} xl={4}>
-                        <MiniCalendar />
+                        <Stack spacing={2}>
+                            <MiniCalendar />
+                            <UpcomingPaymentsCard />
+                        </Stack>
+
                     </Grid>
                 </Grid>
                 <PostDialog

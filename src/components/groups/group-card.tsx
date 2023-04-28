@@ -1,5 +1,5 @@
 import 'react'
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {Group} from "../../types/group";
 import {Avatar, Box, Card, Paper, Stack, styled, SvgIcon, Tooltip, Typography} from "@mui/material";
 import {LockUnlocked01} from "@untitled-ui/icons-react";
@@ -20,9 +20,27 @@ export const HoverGrowthCard = styled(Card)`
   }
 `;
 
+const cacheImages = async (srcArray: string[]) => {
+    const promises = srcArray.map((src) => {
+        return new Promise<void>(function (resolve, reject) {
+            const img = new Image();
+            img.src = src;
+            // @ts-ignore
+            img.onload = resolve();
+            // @ts-ignore
+            img.onerror = reject();
+        })
+    });
+    await Promise.all(promises);
+};
+
 export const GroupCard: FC<GroupCardProps> = (props) => {
     const {group} = props;
     const navigate = useNavigate();
+
+    useEffect(() => {
+        cacheImages([group.backgroundImageURL!, group.profileImageURL!]);
+    }, [group]);
 
     return (
         <Link to={'/groups/' + group.id} style={{textDecoration: 'none'}}>
