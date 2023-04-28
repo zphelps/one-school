@@ -13,7 +13,7 @@ import {
     ListItemText,
     Paper,
     Stack,
-    Typography
+    Typography, useTheme
 } from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {format} from "date-fns";
@@ -98,6 +98,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
     function CustomDay(props: PickersDayProps<Dayjs>) {
         const { day, outsideCurrentMonth, ...other } = props;
         const adapter = new AdapterDateFns();
+        const theme = useTheme();
         // @ts-ignore
         let eventCount = countEventsOnDate(adapter.toJsDate(day).getTime());
         if(eventCount > 3) {
@@ -118,7 +119,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = (props) => {
                             <div
                                 key={i}
                                 style={{
-                                    backgroundColor: 'blue',
+                                    backgroundColor: theme.palette.primary.main,
                                     borderRadius: '50%',
                                     width: 4,
                                     height: 4,

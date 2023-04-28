@@ -53,6 +53,15 @@ export const indigo = withAlphas({
   contrastText: '#FFFFFF'
 });
 
+export const orange = withAlphas({
+  lightest: "#FFF3E0",
+  light: "#FFCC80",
+  main: "#FF9800",
+  dark: "#F57C00",
+  darkest: "#E65100",
+  contrastText: "#FFFFFF",
+});
+
 export const purple = withAlphas({
   lightest: '#F9F5FF',
   light: '#F4EBFF',

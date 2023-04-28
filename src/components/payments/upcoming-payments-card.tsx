@@ -1,5 +1,5 @@
 import 'react'
-import {Button, Card, ListItem, ListItemIcon, ListItemText, Stack, Typography} from "@mui/material";
+import {Button, Card, Chip, ListItem, ListItemIcon, ListItemText, Stack, Typography} from "@mui/material";
 import usePayments from "../../hooks/payments/use-payments";
 import {useSelector} from "react-redux";
 import {useEffect, useMemo, useState} from "react";
@@ -44,27 +44,39 @@ export const UpcomingPaymentsCard = () => {
                     View All
                 </Button>
             </Stack>
-            {payments.map((payment: Payment) => (
-                <ListItem
-                    key={payment.id}
-                    sx={{
-                        p: 1,
-                        '&:hover': {
-                            backgroundColor: 'action.hover',
-                            cursor: 'pointer',
-                            borderRadius: 2,
-                        },
-                    }}
-                >
-                    <ListItemText
-                        primary={payment.name}
-                        secondary={`Due on ${format(payment.issuedOn, 'MMM d, yyyy')}`}
-                    />
-                    <ChevronRightIcon sx={{
-                        color: 'text.secondary'
-                    }}/>
-                </ListItem>
-            ))}
+            {payments.map((payment: Payment) => {
+                const totalAmount = payment.lineItems.reduce((total: number, lineItem: any) => {
+                    return total + lineItem.amount;
+                }, 0);
+                return (
+                    <ListItem
+                        key={payment.id}
+                        sx={{
+                            p: 1,
+                            '&:hover': {
+                                backgroundColor: 'action.hover',
+                                cursor: 'pointer',
+                                borderRadius: 2,
+                            },
+                        }}
+                    >
+                        <ListItemText
+                            primary={payment.name}
+                            secondary={`Due on ${format(payment.issuedOn, 'MMM d, yyyy')}`}
+                        />
+                        <Chip
+                            variant={"outlined"}
+                            sx={{
+                                borderRadius: '8px',
+                            }}
+                            label={`$${totalAmount}`}
+                        />
+                        {/*<ChevronRightIcon sx={{*/}
+                        {/*    color: 'text.secondary'*/}
+                        {/*}}/>*/}
+                    </ListItem>
+                )
+            })}
         </Card>
     )
 }

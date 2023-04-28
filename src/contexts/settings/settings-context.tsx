@@ -41,7 +41,7 @@ const storeSettings = (value: Record<string, any>): void => {
 };
 
 const initialSettings: Settings = {
-  colorPreset: 'blue',
+  colorPreset: 'orange',
   contrast: 'normal',
   direction: 'ltr',
   layout: 'vertical',
