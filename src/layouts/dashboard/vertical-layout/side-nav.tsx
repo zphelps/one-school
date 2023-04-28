@@ -13,6 +13,7 @@ import { TenantSwitch } from '../tenant-switch';
 import { SideNavSection } from './side-nav-section';
 import Logo from "../../../assets/Logo.png";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import {CreateButton} from "../../../components/create-button";
 
 const SIDE_NAV_WIDTH: number = 250;
 
@@ -211,16 +212,7 @@ export const SideNav: FC<SideNavProps> = (props) => {
               px: 2
             }}
           >
-            <Button
-                startIcon={(
-                    <SvgIcon>
-                      <PlusIcon/>
-                    </SvgIcon>
-                )}
-                variant="contained"
-            >
-              Create
-            </Button>
+            <CreateButton/>
             <Divider sx={{ height: 2, mt: 3, mb: 2.5, background: (theme) => theme.palette.grey.A100 }} />
             {sections.map((section, index) => (
               <SideNavSection
