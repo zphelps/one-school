@@ -7,6 +7,7 @@ export interface GroupMember {
     phone?: string;
     role: string;
     grade: number;
+    owner: boolean;
 
     [key: string]: any;
 }

@@ -20,10 +20,30 @@ import {
     DeleteForeverOutlined,
     ManageAccounts, Verified
 } from "@mui/icons-material";
-import React from "react";
+import React, {FC, useCallback} from "react";
 import {Delete} from "@untitled-ui/icons-react";
+import {useDialog} from "../../../hooks/use-dialog";
+import {PreviewPostDialogData} from "../../../pages/home/home";
+import {GroupMember} from "../../../types/group-member";
+import {ManageRoleDialog} from "../../../sections/groups/members/manage-role-dialog";
+import {Group} from "../../../types/group";
+import {ManagePermissionsDialog} from "../../../sections/groups/members/manage-permissions-dialog";
 
-export const ChangeMemberRoleButton = () => {
+interface ManageMemberRoleDialogData {
+    memberID?: string;
+}
+
+interface ManageMemberPermissionsDialogData {
+    memberID?: string;
+}
+
+interface ManageMemberRoleButtonProps {
+    member: GroupMember;
+    group: Group;
+}
+
+export const ManageMemberRoleButton: FC<ManageMemberRoleButtonProps> = (props) => {
+    const {member, group} = props;
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,6 +52,29 @@ export const ChangeMemberRoleButton = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const manageRoleDialog = useDialog<ManageMemberRoleDialogData>();
+    const managePermissionsDialog = useDialog<ManageMemberPermissionsDialogData>();
+
+    const handleManageRoleClick = useCallback(
+        (memberID: string): void => {
+            manageRoleDialog.handleOpen({
+                memberID: memberID
+            });
+            handleClose()
+        },
+        [manageRoleDialog.handleOpen]
+    );
+
+    const handleManagePermissionsClick = useCallback(
+        (memberID: string): void => {
+            managePermissionsDialog.handleOpen({
+                memberID: memberID
+            });
+            handleClose()
+        },
+        [managePermissionsDialog.handleOpen]
+    );
 
     return (
         <>
@@ -53,13 +96,17 @@ export const ChangeMemberRoleButton = () => {
                 transformOrigin={{vertical: 'top', horizontal: 'right'}}
             >
                 <MenuList>
-                    <MenuItem>
+                    <MenuItem
+                        onClick={() => handleManageRoleClick(member?.id)}
+                    >
                         <ListItemIcon>
                             <Verified fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Manage Role</ListItemText>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem
+                        onClick={() => handleManagePermissionsClick(member?.id)}
+                    >
                         <ListItemIcon>
                             <ManageAccounts />
                         </ListItemIcon>
@@ -81,6 +128,18 @@ export const ChangeMemberRoleButton = () => {
                     </MenuItem>
                 </MenuList>
             </Menu>
+            <ManageRoleDialog
+                onClose={manageRoleDialog.handleClose}
+                open={manageRoleDialog.open}
+                groupMember={member}
+                group={group}
+            />
+            <ManagePermissionsDialog
+                onClose={managePermissionsDialog.handleClose}
+                open={managePermissionsDialog.open}
+                groupMember={member}
+                group={group}
+            />
         </>
     )
 }

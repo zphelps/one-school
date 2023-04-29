@@ -333,8 +333,8 @@ export const GroupProfile = () => {
                                 </Grid>
 
                             )}
-                            {currentTab === "members" && (
-                                <GroupMembersList groupID={params.groupId!}/>
+                            {currentTab === "members" && group && (
+                                <GroupMembersList group={group}/>
                             )}
                         </Box>
                     </Box>}

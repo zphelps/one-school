@@ -12,6 +12,7 @@ import {MembersListTable} from "./members-list-table";
 import useGroupMembers from "../../../hooks/members/use-group-members";
 import {useSelector} from "react-redux";
 import {applyPagination} from "../../../utils/apply-pagination";
+import {Group} from "../../../types/group";
 
 interface Filters {
   query?: string;
@@ -93,44 +94,6 @@ interface MembersStoreState {
   memberCount: number;
 }
 
-// const useMembersStore = (searchState: MembersSearchState) => {
-//   const isMounted = useMounted();
-//   const [state, setState] = useState<MembersStoreState>({
-//     members: [],
-//     memberCount: 0
-//   });
-//
-//   const handleCustomersGet = useCallback(
-//     async () => {
-//       try {
-//         const response = await customersApi.getCustomers(searchState);
-//
-//         if (isMounted()) {
-//           setState({
-//             members: response.data,
-//             memberCount: response.count
-//           });
-//         }
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     },
-//     [searchState, isMounted]
-//   );
-//
-//   useEffect(
-//     () => {
-//       handleCustomersGet();
-//     },
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//     [searchState]
-//   );
-//
-//   return {
-//     ...state
-//   };
-// };
-
 const useMembersIds = (members: GroupMember[] = []) => {
   return useMemo(
     () => {
@@ -141,27 +104,26 @@ const useMembersIds = (members: GroupMember[] = []) => {
 };
 
 interface GroupMembersListProps {
-    groupID: string;
+    group: Group;
 }
 
 export const GroupMembersList: FC<GroupMembersListProps> = (props) => {
-  const {groupID} = props;
+  const {group} = props;
   const membersSearch = useMembersSearch();
-  // const membersStore = useMembersStore(membersSearch.state);
 
   const [membersStore, setMembersStore] = useState<MembersStoreState>({
     members: [],
     memberCount: 0
   });
 
-  useGroupMembers(groupID)
+  useGroupMembers(group.id)
 
   // @ts-ignore
   const allGroupsMembers = useSelector((state) => state.groupMembers.data);
 
   useMemo(() => {
-        if (allGroupsMembers[groupID] && allGroupsMembers[groupID].length > 0) {
-          const members = applyPagination(allGroupsMembers[groupID].filter((member: GroupMember) => {
+        if (allGroupsMembers[group.id] && allGroupsMembers[group.id].length > 0) {
+          const members = applyPagination(allGroupsMembers[group.id].filter((member: GroupMember) => {
               if (membersSearch.state.filters.query) {
                 const memberName = `${member.firstName} ${member.lastName}`;
                 return memberName.toLowerCase().includes(membersSearch.state.filters.query.toLowerCase());
@@ -174,7 +136,7 @@ export const GroupMembersList: FC<GroupMembersListProps> = (props) => {
           setMembersStore({
             // @ts-ignore
             members: members,
-            memberCount: allGroupsMembers[groupID].length
+            memberCount: allGroupsMembers[group.id].length
           });
         }
       },
@@ -206,6 +168,7 @@ export const GroupMembersList: FC<GroupMembersListProps> = (props) => {
               sortDir={membersSearch.state.sortDir}
           />
           <MembersListTable
+              group={group}
               count={membersStore.memberCount}
               items={membersStore.members}
               onDeselectAll={membersSelection.handleDeselectAll}

@@ -26,9 +26,11 @@ import {GroupMember} from "../../../types/group-member";
 import {getInitials} from "../../../utils/get-initials";
 import React from "react";
 import {Cloud, ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
-import {ChangeMemberRoleButton} from "../../../components/groups/members/change-member-role-button";
+import {ManageMemberRoleButton} from "../../../components/groups/members/manage-member-role-button";
+import {Group} from "../../../types/group";
 
 interface MembersListTableProps {
+    group: Group;
     count?: number;
     items?: GroupMember[];
     onDeselectAll?: () => void;
@@ -44,6 +46,7 @@ interface MembersListTableProps {
 
 export const MembersListTable: FC<MembersListTableProps> = (props) => {
     const {
+        group,
         count = 0,
         items = [],
         onDeselectAll,
@@ -223,7 +226,7 @@ export const MembersListTable: FC<MembersListTableProps> = (props) => {
                                     {/*  </Typography>*/}
                                     {/*</TableCell>*/}
                                     <TableCell align="right">
-                                        <ChangeMemberRoleButton/>
+                                        <ManageMemberRoleButton member={member} group={group}/>
                                         <IconButton
                                             // component={RouterLink}
                                             // href={paths.dashboard.customers.details}
