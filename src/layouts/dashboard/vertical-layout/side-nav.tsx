@@ -215,7 +215,7 @@ export const SideNav: FC<SideNavProps> = (props) => {
                                 alignItems: "center",
                             }}
                         >
-                            Hamilton Heights Height School
+                            Hamilton Heights High School
                         </Typography>
                     </Stack>
                     <Divider sx={{height: 2, mt: 2, mb: 2, background: (theme) => theme.palette.grey.A100}}/>

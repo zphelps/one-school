@@ -173,7 +173,7 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
                   alignItems: "center",
                 }}
             >
-              Hamilton Heights Height School
+              Hamilton Heights High School
             </Typography>
           </Stack>
           <Divider sx={{ height: 2, mt: 3, mb: 2.5, background: (theme) => theme.palette.grey.A200 }} />
