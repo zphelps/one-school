@@ -62,7 +62,7 @@ export const UpcomingPaymentsCard = () => {
                     >
                         <ListItemText
                             primary={payment.name}
-                            secondary={`Due on ${format(payment.issuedOn, 'MMM d, yyyy')}`}
+                            secondary={`Due on ${format(payment.dueOn, 'MMM d, yyyy')}`}
                         />
                         <Chip
                             variant={"outlined"}
