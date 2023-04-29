@@ -47,7 +47,7 @@ export const AnnouncementDetails = () => {
                 </Typography>
                 <Divider sx={{my: 2}}/>
                 <Stack direction={{xs: 'column', md: "row"}} spacing={2} justifyContent={'space-between'}>
-                    <Stack direction={'row'}>
+                    <Stack direction={'row'} flex={4}>
                         <Avatar
                             src={announcement?.author.imageURL}
                             sx={{
@@ -101,6 +101,7 @@ export const AnnouncementDetails = () => {
 
                     <Stack
                         alignItems={{xs: 'start', md: "end"}}
+                        flex={1}
                     >
                         <Hidden only={['xs', 'sm']}>
                             <Typography

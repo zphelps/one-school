@@ -4,7 +4,18 @@ import {PostCard} from "../../components/feed/post-card";
 import {useSelector} from "react-redux";
 import useMainFeedPosts from "../../hooks/posts/use-main-feed-posts";
 import {Status} from "../../utils/status";
-import {Button, Container, Grid, Stack, SvgIcon} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    Container,
+    Grid,
+    InputAdornment, InputBase,
+    OutlinedInput,
+    Stack,
+    SvgIcon,
+    TextField
+} from "@mui/material";
 import {PostDialog} from "../../components/feed/create-post-dialog";
 import {useDialog} from "../../hooks/use-dialog";
 import {useCallback, useMemo} from "react";
@@ -12,6 +23,7 @@ import {MiniCalendar} from "../../sections/calendar/mini-calendar";
 import {PostCardSkeleton} from "../../components/feed/post-skeleton-card";
 import {UpcomingPaymentsCard} from "../../components/payments/upcoming-payments-card";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import SearchMdIcon from "@untitled-ui/icons-react/build/esm/SearchMd";
 
 export interface PreviewPostDialogData {
     postID?: string;
@@ -62,7 +74,53 @@ export const Home = () => {
                 <Grid container spacing={2} sx={{mt: 2}}>
                     {status == Status.SUCCESS && <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
                         {posts && (
-                            posts.map((post: Post) => (
+                            <>
+                                <Stack
+                                    alignItems="center"
+                                    direction="row"
+                                    flexWrap="wrap"
+                                    gap={3}
+                                    sx={{pb: 3}}
+                                >
+                                    <Card
+                                        component="form"
+                                        // onSubmit={handleQueryChange}
+                                        sx={{flexGrow: 1, p:2}}
+                                    >
+                                        <InputBase
+                                            defaultValue=""
+                                            fullWidth
+                                            // inputProps={{ref: queryRef}}
+                                            name="paymentNumber"
+                                            placeholder="Search posts"
+                                            startAdornment={(
+                                                <InputAdornment position="start">
+                                                    <SvgIcon>
+                                                        <SearchMdIcon/>
+                                                    </SvgIcon>
+                                                </InputAdornment>
+                                            )}
+                                        />
+                                    </Card>
+                                    {/*<TextField*/}
+                                    {/*    label="Sort By"*/}
+                                    {/*    name="sort"*/}
+                                    {/*    // onChange={handleSortChange}*/}
+                                    {/*    select*/}
+                                    {/*    SelectProps={{native: true}}*/}
+                                    {/*    value={sortDir}*/}
+                                    {/*>*/}
+                                    {/*    {sortOptions.map((option) => (*/}
+                                    {/*        <option*/}
+                                    {/*            key={option.value}*/}
+                                    {/*            value={option.value}*/}
+                                    {/*        >*/}
+                                    {/*            {option.label}*/}
+                                    {/*        </option>*/}
+                                    {/*    ))}*/}
+                                    {/*</TextField>*/}
+                                </Stack>
+                                {posts.map((post: Post) => (
                                 <PostCard
                                     key={post.id}
                                     post={post}
@@ -70,7 +128,8 @@ export const Home = () => {
                                     preview={false}
                                     // handlePreviewClick={handlePreviewClick}
                                 />
-                            ))
+                                ))}
+                            </>
                         )}
                     </Grid>}
                     {(status == Status.LOADING || status == Status.IDLE) && <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>

@@ -22,8 +22,12 @@ export const AnnouncementCard: FC<AnnouncementCardProps> = (props) => {
                 width: '100%',
             }}
         >
-            <Stack direction={{xs: 'column', md: "row"}} spacing={2} justifyContent={'space-between'}>
-                <Stack direction={'row'}>
+            <Stack
+                direction={{xs: 'column', md: "row"}}
+                spacing={2}
+                justifyContent={'space-between'}
+            >
+                <Stack direction={'row'} flex={4}>
                     <Avatar
                         src={announcement.author.imageURL}
                         sx={{
@@ -76,6 +80,7 @@ export const AnnouncementCard: FC<AnnouncementCardProps> = (props) => {
                 </Stack>
 
                 <Stack
+                    flex={1}
                     alignItems={{xs: 'start', md: "end"}}
                 >
                     <Hidden only={['xs', 'sm']}>
