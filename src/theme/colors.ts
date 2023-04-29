@@ -60,6 +60,12 @@ export const orange = withAlphas({
   dark: "#F57C00",
   darkest: "#E65100",
   contrastText: "#FFFFFF",
+  // lightest: "#FFEBE0",
+  // light: "#FFA880",
+  // main: "#FF5200",
+  // dark: "#E94600",
+  // darkest: "#CE2F00",
+  // contrastText: "#FFFFFF",
 });
 
 export const purple = withAlphas({

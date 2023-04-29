@@ -13,6 +13,7 @@ import type { Section } from '../config';
 import { TenantSwitch } from '../tenant-switch';
 import { MobileNavSection } from './mobile-nav-section';
 import Logo from '../../../assets/Logo.png';
+import HamHeightsLogo from "../../../assets/HamiltonHeights_LogoOrange.png";
 
 const MOBILE_NAV_WIDTH: number = 280;
 
@@ -148,17 +149,31 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
         <Stack sx={{ height: '100%' }}>
           <Stack
             alignItems="center"
-            direction="row"
+            direction="column"
             spacing={1.5}
             sx={{ pt: 3, px: 4}}
           >
-            <img style={{height: '38px', width: '35px'}} src={Logo}></img>
+            {/*<img style={{height: '38px', width: '35px'}} src={Logo}></img>*/}
+            {/*<Typography*/}
+            {/*    variant="h5"*/}
+            {/*    sx={{fontFamily: (theme) => theme.typography.fontFamily,*/}
+            {/*      color: (theme) => theme.palette.text.secondary}}*/}
+            {/*>*/}
+            {/*  OneSchool*/}
+            {/*</Typography>*/}
+            <img style={{height: "40px", width: "100px"}} src={HamHeightsLogo}></img>
             <Typography
-                variant="h5"
-                sx={{fontFamily: (theme) => theme.typography.fontFamily,
-                  color: (theme) => theme.palette.text.secondary}}
+                variant="h6"
+                sx={{
+                  fontFamily: (theme) => theme.typography.fontFamily,
+                  color: (theme) => theme.palette.text.secondary,
+                  letterSpacing: "0.025em",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
             >
-              OneSchool
+              Hamilton Heights Height School
             </Typography>
           </Stack>
           <Divider sx={{ height: 2, mt: 3, mb: 2.5, background: (theme) => theme.palette.grey.A200 }} />

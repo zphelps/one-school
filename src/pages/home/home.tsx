@@ -59,7 +59,7 @@ export const Home = () => {
             <Seo title="Home | OneSchool"/>
             {/*<Button onClick={handleAddClick}>New Post</Button>*/}
             <Container maxWidth={'xl'}>
-                <Grid container spacing={2} sx={{mt: 4}}>
+                <Grid container spacing={2} sx={{mt: 2}}>
                     {status == Status.SUCCESS && <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
                         {posts && (
                             posts.map((post: Post) => (
