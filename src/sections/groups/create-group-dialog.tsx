@@ -368,6 +368,7 @@ export const CreateGroupDialog: FC<CreateGroupDialogProps> = (props) => {
                                     position: "relative"
                                 }}
                             >
+                                <input {...getProfileInputProps()}/>
                                 <Box
                                     sx={{
                                         alignItems: "center",
