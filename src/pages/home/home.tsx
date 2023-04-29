@@ -24,6 +24,7 @@ import {PostCardSkeleton} from "../../components/feed/post-skeleton-card";
 import {UpcomingPaymentsCard} from "../../components/payments/upcoming-payments-card";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import SearchMdIcon from "@untitled-ui/icons-react/build/esm/SearchMd";
+import { PostsSearch } from "../../components/feed/posts-search";
 
 export interface PreviewPostDialogData {
     postID?: string;
@@ -71,55 +72,11 @@ export const Home = () => {
             <Seo title="Home | OneSchool"/>
             {/*<Button onClick={handleAddClick}>New Post</Button>*/}
             <Container maxWidth={'xl'}>
-                <Grid container spacing={2} sx={{mt: 2}}>
+                <Grid container spacing={3} sx={{mt: 1}}>
                     {status == Status.SUCCESS && <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
                         {posts && (
                             <>
-                                <Stack
-                                    alignItems="center"
-                                    direction="row"
-                                    flexWrap="wrap"
-                                    gap={3}
-                                    sx={{pb: 3}}
-                                >
-                                    <Card
-                                        component="form"
-                                        // onSubmit={handleQueryChange}
-                                        sx={{flexGrow: 1, p:2}}
-                                    >
-                                        <InputBase
-                                            defaultValue=""
-                                            fullWidth
-                                            // inputProps={{ref: queryRef}}
-                                            name="paymentNumber"
-                                            placeholder="Search posts"
-                                            startAdornment={(
-                                                <InputAdornment position="start">
-                                                    <SvgIcon>
-                                                        <SearchMdIcon/>
-                                                    </SvgIcon>
-                                                </InputAdornment>
-                                            )}
-                                        />
-                                    </Card>
-                                    {/*<TextField*/}
-                                    {/*    label="Sort By"*/}
-                                    {/*    name="sort"*/}
-                                    {/*    // onChange={handleSortChange}*/}
-                                    {/*    select*/}
-                                    {/*    SelectProps={{native: true}}*/}
-                                    {/*    value={sortDir}*/}
-                                    {/*>*/}
-                                    {/*    {sortOptions.map((option) => (*/}
-                                    {/*        <option*/}
-                                    {/*            key={option.value}*/}
-                                    {/*            value={option.value}*/}
-                                    {/*        >*/}
-                                    {/*            {option.label}*/}
-                                    {/*        </option>*/}
-                                    {/*    ))}*/}
-                                    {/*</TextField>*/}
-                                </Stack>
+                                <PostsSearch />
                                 {posts.map((post: Post) => (
                                 <PostCard
                                     key={post.id}

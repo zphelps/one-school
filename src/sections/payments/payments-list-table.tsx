@@ -51,12 +51,12 @@ export const PaymentsListTable: FC<PaymentsListTableProps> = (props) => {
   const getStatus = useCallback((payment: Payment) => {
     if(payment.userIdsPaid.includes(auth.user?.id as string)) {
       return 'paid';
-    } else if (payment.issuedOn < new Date().getTime()) {
+    } else if (payment.dueOn < new Date().getTime()) {
       return 'overdue';
     } else {
         return 'upcoming';
     }
-  }, [items])
+  }, [])
 
   return (
     <div>
