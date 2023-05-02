@@ -1,6 +1,6 @@
 import {lazy, Suspense} from 'react';
 import type {RouteObject} from 'react-router';
-import {Outlet} from 'react-router-dom';
+import {Navigate, Outlet} from "react-router-dom";
 import {Layout as DashboardLayout} from '../layouts/dashboard';
 import {Home} from "../pages/home/home";
 import {EventsCalendar} from "../pages/calendar/calendar";

@@ -18,3 +18,10 @@ export interface Group {
         imageURL: string;
     }
 }
+
+export interface GroupMediaItem {
+    id: string;
+    createdAt: number;
+    type: string;
+    url: string;
+}

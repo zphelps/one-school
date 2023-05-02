@@ -72,7 +72,7 @@ export const Home = () => {
             <Seo title="Home | OneSchool"/>
             {/*<Button onClick={handleAddClick}>New Post</Button>*/}
             <Container maxWidth={'xl'}>
-                <Grid container spacing={3} sx={{mt: 1}}>
+                <Grid container spacing={3} sx={{mt: 0}}>
                     {status == Status.SUCCESS && <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
                         {posts && (
                             <>

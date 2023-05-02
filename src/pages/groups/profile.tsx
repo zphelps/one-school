@@ -33,6 +33,7 @@ import {alpha} from "@mui/material/styles";
 import {GroupMembersList} from "../../sections/groups/members/list";
 import PrivateLogo from "../../assets/error-401.png";
 import {CreatePostPromptCard} from "../../components/feed/create-post-prompt-card";
+import {GroupMediaGrid} from "../../sections/groups/media/grid";
 
 const tabs = [
     {label: "Home", value: "home"},
@@ -52,17 +53,21 @@ export const GroupProfile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setCurrentTab(params.tab ?? 'home')
+    }, [params.groupId, params.tab]);
+
+    useEffect(() => {
         if (document) {
             setGroup(document);
         }
-    }, [document]);
+    }, [document, params]);
 
     const handleTabsChange = useCallback(
         (event: ChangeEvent<{}>, value: string): void => {
             setCurrentTab(value);
             navigate(`/groups/${params.groupId}/${value}`, {replace: true})
         },
-        []
+        [navigate]
     );
 
     return (
@@ -335,6 +340,9 @@ export const GroupProfile = () => {
                             )}
                             {currentTab === "members" && group && (
                                 <GroupMembersList group={group}/>
+                            )}
+                            {currentTab === "media" && group && (
+                                <GroupMediaGrid group={group}/>
                             )}
                         </Box>
                     </Box>}
