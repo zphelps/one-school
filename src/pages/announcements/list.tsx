@@ -17,6 +17,7 @@ import useAnnouncements from "../../hooks/announcements/use-announcements";
 import {AnnouncementCard} from "../../components/announcements/announcement-card";
 import {Announcement} from "../../types/announcement";
 import {AnnouncementComposer} from "../../sections/announcements/announcement-composer";
+import {AnnouncementDialog} from "../../components/announcements/create-announcement";
 
 interface Filters {
     query?: string;
@@ -215,6 +216,15 @@ export const Announcements = () => {
         [announcementsSearch.state, announcements]
     );
 
+    const createDialog = useDialog();
+
+    const handleAddClick = useCallback(
+        (): void => {
+            createDialog.handleOpen();
+        },
+        [createDialog.handleOpen]
+    );
+
     return (
         <>
             <Seo title="Announcements | OneSchool"/>
@@ -256,12 +266,12 @@ export const Announcements = () => {
                                     </div>
                                     <div>
                                         <Button
-                                            startIcon={(
+                                            endIcon={(
                                                 <SvgIcon>
                                                     <PlusIcon/>
                                                 </SvgIcon>
                                             )}
-                                            onClick={() => composer.handleOpen()}
+                                            onClick={handleAddClick}
                                             variant="contained"
                                         >
                                             Create
@@ -293,18 +303,11 @@ export const Announcements = () => {
                     </GroupListContainer>
                 </Box>
             </Box>
-            <AnnouncementComposer
-                maximize={composer.isFullScreen}
-                message={composer.message}
-                onClose={composer.handleClose}
-                onMaximize={composer.handleMaximize}
-                onMessageChange={composer.handleMessageChange}
-                onMinimize={composer.handleMinimize}
-                onSubjectChange={composer.handleSubjectChange}
-                onToChange={composer.handleToChange}
-                open={composer.isOpen}
-                subject={composer.subject}
-                to={composer.to}
+            <AnnouncementDialog
+                action="create"
+                onAddComplete={createDialog.handleClose}
+                onClose={createDialog.handleClose}
+                open={createDialog.open}
             />
         </>
     );
