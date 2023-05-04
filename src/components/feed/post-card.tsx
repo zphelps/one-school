@@ -11,7 +11,7 @@ import {useFirestore} from "../../hooks/firebase/useFirestore";
 import {useAuth} from "../../hooks/use-auth";
 import {PostComment} from "../../types/post-comment";
 import {PostCommentCard} from "./post-comment-card";
-import {FC, useCallback, useState} from "react";
+import {FC, useCallback, useEffect, useState} from "react";
 import {v4 as uuidv4} from "uuid";
 import {alpha} from "@mui/material/styles";
 import {LeafPoll, Result} from "react-leaf-polls";
@@ -21,6 +21,9 @@ import {PollOption} from "../../types/poll";
 import {useDialog} from "../../hooks/use-dialog";
 import {PreviewPostDialogData} from "../../pages/home/home";
 import {PostCardDialog} from "./post-card-dialog";
+import {cacheImages} from "../../utils/cache-image";
+import {MoreHorizOutlined, MoreVertOutlined} from "@mui/icons-material";
+import {ManagePostButton} from "./manage-post-button";
 
 interface PostCardProps {
     post: Post;
@@ -121,6 +124,12 @@ export const PostCard: FC<PostCardProps> = (props) => {
 
     }
 
+    useEffect(() => {
+        if(post.imageURLS) {
+            cacheImages(post.imageURLS)
+        }
+    }, [post.imageURLS])
+
     return (
         <Card sx={{
             mb: preview ? 0 : 2,
@@ -134,24 +143,27 @@ export const PostCard: FC<PostCardProps> = (props) => {
             backgroundColor: preview ? 'transparent' : 'inherit',
         }}
         >
-            <Stack direction="row" spacing={1.5} sx={{mx: 2}}>
-                <Avatar src={onMainFeed ? post.group.imageURL : post.author.imageURL}></Avatar>
-                <Stack>
-                    {onMainFeed && <Link to={`/groups/${post.group.id}`} style={{textDecoration: "none", color: "black"}}>
-                        <Typography>
-                            {post.group.name}
+            <Stack direction={'row'} justifyContent={'space-between'} alignItems={'start'}>
+                <Stack direction="row" spacing={1.5} sx={{mx: 2}}>
+                    <Avatar src={onMainFeed ? post.group.imageURL : post.author.imageURL}></Avatar>
+                    <Stack>
+                        {onMainFeed && <Link to={`/groups/${post.group.id}`} style={{textDecoration: "none", color: "black"}}>
+                            <Typography>
+                                {post.group.name}
+                            </Typography>
+                        </Link>}
+                        {!onMainFeed && <Link to={`/users/${post.author.id}`} style={{textDecoration: "none", color: "black"}}>
+                            <Typography>
+                                {`${post.author?.firstName ?? ""} ${post.author?.lastName ?? ""}`}
+                            </Typography>
+                        </Link>}
+                        <Typography variant={"caption"} color={"text.secondary"}>
+                            {onMainFeed && `Posted by ${post.author?.firstName} ${post.author?.lastName} • `}
+                            {formatDistanceToNowStrict(new Date(post.createdAt), {addSuffix: true})}
                         </Typography>
-                    </Link>}
-                    {!onMainFeed && <Link to={`/users/${post.author.id}`} style={{textDecoration: "none", color: "black"}}>
-                        <Typography>
-                            {`${post.author?.firstName ?? ""} ${post.author?.lastName ?? ""}`}
-                        </Typography>
-                    </Link>}
-                    <Typography variant={"caption"} color={"text.secondary"}>
-                        {onMainFeed && `Posted by ${post.author?.firstName} ${post.author?.lastName} • `}
-                        {formatDistanceToNowStrict(new Date(post.createdAt), {addSuffix: true})}
-                    </Typography>
+                    </Stack>
                 </Stack>
+                <ManagePostButton post={post} />
             </Stack>
             <Typography variant={"body1"} sx={{my: 1, mx: 2}}>
                 {`${post.text ?? ''}`}

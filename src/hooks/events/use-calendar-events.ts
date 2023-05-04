@@ -13,7 +13,7 @@ const useCalendarEvents = (start?: number, end?: number) => {
 
     const auth = useAuth();
 
-    useMemo(() => {
+    useEffect(() => {
         // @ts-ignore
         let ref = collection(db, "tenants", auth.user.tenantID, "events");
         // @ts-ignore

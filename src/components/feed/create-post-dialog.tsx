@@ -413,7 +413,7 @@ export const PostDialog: FC<PostDialogProps> = (props) => {
                             <TextField
                                 {...params}
                                 error={!!(formik.touched.group && formik.errors.group)}
-                                label="Who should this post go to?"
+                                label="Where should this post go?"
                                 onBlur={formik.handleBlur}
                                 InputProps={{
                                     ...params.InputProps,

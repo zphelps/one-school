@@ -7,6 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 import EventIcon from '@mui/icons-material/EventOutlined';
 import GroupIcon from '@mui/icons-material/GroupOutlined';
 import FolderIcon from '@mui/icons-material/FolderOutlined';
+import {cacheImages} from "../../utils/cache-image";
 
 interface GroupCardProps {
     group: Group;
@@ -19,21 +20,6 @@ export const HoverGrowthCard = styled(Card)`
     transform: scale(1.025); /* Adjust the scale value for desired growth effect */
   }
 `;
-
-const cacheImages = async (srcArray: string[]) => {
-    const promises = srcArray.map((src) => {
-        return new Promise<void>(function (resolve, reject) {
-            const img = new Image();
-            img.src = src;
-            // @ts-ignore
-            img.onload = resolve();
-            // @ts-ignore
-            img.onerror = reject();
-        })
-    });
-    await Promise.all(promises);
-};
-
 export const GroupCard: FC<GroupCardProps> = (props) => {
     const {group} = props;
     const navigate = useNavigate();

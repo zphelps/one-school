@@ -68,7 +68,7 @@ export const EventsCalendar = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [view, setView] = useState<CalendarView>(mdUp ? 'timeGridDay' : 'dayGridMonth');
     const previewDialog = useDialog<PreviewDialogData>();
-    const createDialog = useDialog<CreateDialogData>();
+    const createDialog = useDialog();
     const updateDialog = useDialog<UpdateDialogData>();
     const updatingEvent = useCurrentEvent(events, previewDialog.data);
 
