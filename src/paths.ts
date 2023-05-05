@@ -18,7 +18,12 @@ export const paths = {
     details: '/groups/:groupId'
   },
   conversations: '/conversations',
-  forms: '/forms',
+  forms: {
+    index: '/forms',
+    create: '/forms/create',
+    edit: '/forms/:formId/edit',
+    details: '/forms/:formId'
+  },
   payments: '/payments',
   files: '/files',
     settings: '/settings',
