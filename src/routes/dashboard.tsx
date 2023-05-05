@@ -8,7 +8,6 @@ import {EventDetails} from "../pages/events/event-details";
 import {Groups} from "../pages/groups/list";
 import {GroupProfile} from "../pages/groups/profile";
 import {Forms} from "../pages/forms/list";
-import {FormProfile} from "../pages/forms/profile";
 import {Conversations} from "../pages/conversations/conversations";
 import {Account} from "../pages/account";
 import {Announcements} from "../pages/announcements/list";
@@ -87,15 +86,7 @@ export const dashboardRoutes: RouteObject[] = [
                 children: [
                     {
                         index: true,
-                        element: <Forms/>
-                    },
-                    {
-                        path: ':groupId/:tab',
-                        element: <FormProfile />
-                    },
-                    {
-                        path: ':groupId',
-                        element: <FormProfile />
+                        element: <Forms />
                     },
                 ]
             },
