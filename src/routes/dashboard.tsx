@@ -7,6 +7,7 @@ import {EventsCalendar} from "../pages/calendar/calendar";
 import {EventDetails} from "../pages/events/event-details";
 import {Groups} from "../pages/groups/list";
 import {GroupProfile} from "../pages/groups/profile";
+import {Forms} from "../pages/forms/list";
 import {Conversations} from "../pages/conversations/conversations";
 import {Account} from "../pages/account";
 import {Announcements} from "../pages/announcements/list";
@@ -85,8 +86,8 @@ export const dashboardRoutes: RouteObject[] = [
                 children: [
                     {
                         index: true,
-                        element: <div>Forms</div>
-                    }
+                        element: <Forms />
+                    },
                 ]
             },
             {
