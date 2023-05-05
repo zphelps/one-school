@@ -10,7 +10,7 @@ import {useDialog} from "../../hooks/use-dialog";
 import {useMounted} from "../../hooks/use-mounted";
 import {GroupListContainer} from "../../sections/groups/group-list-container";
 import {FormListSearch} from "../../sections/forms/form-list-search";
-import {GroupCard} from "../../components/groups/group-card";
+import {FormCard} from "../../components/forms/form-card";
 import GroupCardSkeleton from "../../components/groups/group-skeleton-card";
 import {PostDialog} from "../../components/feed/create-post-dialog";
 import {CreateGroupDialog} from "../../sections/groups/create-group-dialog";
@@ -101,7 +101,7 @@ export const Forms = () => {
     });
 
     // @ts-ignore
-    const groups = useSelector((state) => state.groups.data);
+    const groups = useSelector((state) => state.forms.data);
 
     const isMounted = useMounted();
 
@@ -111,7 +111,7 @@ export const Forms = () => {
                     // @ts-ignore
                     groups: groups.filter((group) => {
                         if (groupsSearch.state.filters.query
-                            && !group.name.toLowerCase().includes(groupsSearch.state.filters.query.toLowerCase())) {
+                            && !group.title.toLowerCase().includes(groupsSearch.state.filters.query.toLowerCase())) {
                             return false;
                         }
                         if(groupsSearch.state.filters.status) {
@@ -197,7 +197,7 @@ export const Forms = () => {
                             <Grid container spacing={2.5}>
                                 {groupsStore.groupsCount > 0 && groupsStore.groups.map((group) => (
                                     <Grid key={group.id} item xs={12} sm={6} md={4} lg={3} xl={3} >
-                                        <GroupCard group={group}/>
+                                        <FormCard group={group}/>
                                     </Grid>
                                 ))}
                                 {groupsStore.groupsCount === 0 && Array.from({length: 12}).map((_, index) => (

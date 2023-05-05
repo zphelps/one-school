@@ -15,7 +15,7 @@ const useForms = () => {
 
     useEffect(() => {
         // @ts-ignore
-        let ref = query(collection(db, "tenants", auth.user.tenantID, "users", auth.user?.id, "forms"), orderBy("createdOn", "desc"));
+        let ref = query(collection(db, "tenants", auth.user.tenantID, "users", auth.user?.id, "forms"), orderBy("created", "desc"));
 
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {
@@ -23,7 +23,6 @@ const useForms = () => {
                     id: doc.id,
                     ...doc.data(),
                 }));
-
                 dispatch(setForms(data));
                 dispatch(setFormsStatus(Status.SUCCESS));
             },
