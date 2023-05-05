@@ -15,7 +15,7 @@ const useGroups = () => {
 
     useEffect(() => {
         // @ts-ignore
-        let ref = query(collection(db, "tenants", auth.user.tenantID, "groups"), orderBy("name", "desc"));
+        let ref = query(collection(db, "tenants", auth.user.tenantID, "groups"), orderBy("name", "asc"));
 
         const unsubscribe = onSnapshot(ref,
             (snapshot: { docs: any[]; }) => {
