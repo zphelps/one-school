@@ -21,15 +21,11 @@ export const HoverGrowthCard = styled(Card)`
   }
 `;
 export const FormCard: FC<FormCardProps> = (props) => {
-    const {group} = props;
+    const {form} = props;
     const navigate = useNavigate();
 
-    useEffect(() => {
-        cacheImages([group.backgroundImageURL!, group.profileImageURL!]);
-    }, [group]);
-
     return (
-        <Link to={'/groups/' + group.id} style={{textDecoration: 'none'}}>
+        <Link to={'/groups/' + form.id} style={{textDecoration: 'none'}}>
             <HoverGrowthCard>
                 <img
                     width={'100%'}
@@ -70,7 +66,7 @@ export const FormCard: FC<FormCardProps> = (props) => {
                             }}
                         >
                             <Typography variant={'body2'}>
-                                {group.group}
+                                {form.group}
                             </Typography>
                         </Paper>
                     </Box>
@@ -78,7 +74,7 @@ export const FormCard: FC<FormCardProps> = (props) => {
                         variant={'h5'}
                         sx={{mt: 1, mb: 0.5}}
                     >
-                        {group.title}
+                        {form.title}
                     </Typography>
                     <Stack direction={"row"} alignItems={'center'}>
                         {/* @ts-ignore */}
@@ -86,7 +82,7 @@ export const FormCard: FC<FormCardProps> = (props) => {
                             variant={'subtitle2'}
                             color={'text.secondary'}
                         >
-                            Due on {new Date(group.due).toLocaleDateString()}
+                            Due on {new Date(form.due).toLocaleDateString()}
                         </Typography>
                         <Paper
                             variant={'outlined'}
@@ -101,7 +97,7 @@ export const FormCard: FC<FormCardProps> = (props) => {
                             }}
                         >
                             <Typography variant={'body2'}>
-                                {group.status}
+                                {form.status}
                             </Typography>
                         </Paper>
                     </Stack>

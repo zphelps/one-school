@@ -22,14 +22,14 @@ interface Filters {
 
 type SortDir = "asc" | "desc";
 
-interface GroupsSearchState {
+interface FormsSearchState {
     filters: Filters;
     page: number;
     rowsPerPage: number;
 }
 
-const useGroupsSearch = () => {
-    const [state, setState] = useState<GroupsSearchState>({
+const useFormsSearch = () => {
+    const [state, setState] = useState<FormsSearchState>({
         filters: {
             query: undefined,
             status: undefined
@@ -76,14 +76,14 @@ const useGroupsSearch = () => {
     };
 };
 
-interface GroupsStoreState {
-    groups: Form[];
-    groupsCount: number;
+interface FormsStoreState {
+    forms: Form[];
+    formsCount: number;
 }
 
 export const Forms = () => {
     const rootRef = useRef<HTMLDivElement | null>(null);
-    const groupsSearch = useGroupsSearch();
+    const formsSearch = useFormsSearch();
     const createDialog = useDialog();
 
     const handleAddClick = useCallback(
@@ -95,42 +95,42 @@ export const Forms = () => {
 
     useForms();
 
-    const [groupsStore, setGroupsStore] = useState<GroupsStoreState>({
-        groups: [],
-        groupsCount: 0
+    const [formsStore, setFormsStore] = useState<FormsStoreState>({
+        forms: [],
+        formsCount: 0
     });
 
     // @ts-ignore
-    const groups = useSelector((state) => state.forms.data);
+    const forms = useSelector((state) => state.forms.data);
 
     const isMounted = useMounted();
 
     useEffect(() => {
-            if (groups.length > 0 && isMounted()) {
-                setGroupsStore({
+            if (forms.length > 0 && isMounted()) {
+                setFormsStore({
                     // @ts-ignore
-                    groups: groups.filter((group) => {
-                        if (groupsSearch.state.filters.query
-                            && !group.title.toLowerCase().includes(groupsSearch.state.filters.query.toLowerCase())) {
+                    forms: forms.filter((form) => {
+                        if (formsSearch.state.filters.query
+                            && !form.title.toLowerCase().includes(formsSearch.state.filters.query.toLowerCase())) {
                             return false;
                         }
-                        if(groupsSearch.state.filters.status) {
-                            if(groupsSearch.state.filters.status === 'Completed') {
-                                return group.category == 'Completed';
-                            } else if(groupsSearch.state.filters.status === 'Incomplete') {
-                                return group.category == 'Incomplete';
-                            } else if(groupsSearch.state.filters.status === 'Overdue') {
-                                return group.category == 'Overdue';
+                        if(formsSearch.state.filters.status) {
+                            if(formsSearch.state.filters.status === 'Completed') {
+                                return form.category == 'Completed';
+                            } else if(formsSearch.state.filters.status === 'Incomplete') {
+                                return form.category == 'Incomplete';
+                            } else if(formsSearch.state.filters.status === 'Overdue') {
+                                return form.category == 'Overdue';
                             }
                             return false;
                         }
                         return true;
                     }),
-                    groupsCount: groups.length
+                    formsCount: forms.length
                 });
             }
         },
-        [groupsSearch.state, groups]
+        [formsSearch.state, forms]
     );
 
     return (
@@ -189,18 +189,18 @@ export const Forms = () => {
                             </Box>
                             <Divider/>
                             <FormListSearch
-                                onFiltersChange={groupsSearch.handleFiltersChange}
+                                onFiltersChange={formsSearch.handleFiltersChange}
                             />
                         </Container>
                         <Divider/>
                         <Container maxWidth="xl" sx={{mt: 2}}>
                             <Grid container spacing={2.5}>
-                                {groupsStore.groupsCount > 0 && groupsStore.groups.map((group) => (
-                                    <Grid key={group.id} item xs={12} sm={6} md={4} lg={3} xl={3} >
-                                        <FormCard group={group}/>
+                                {formsStore.formsCount > 0 && formsStore.forms.map((form) => (
+                                    <Grid key={form.id} item xs={12} sm={6} md={4} lg={3} xl={3} >
+                                        <FormCard form={form}/>
                                     </Grid>
                                 ))}
-                                {groupsStore.groupsCount === 0 && Array.from({length: 12}).map((_, index) => (
+                                {formsStore.formsCount === 0 && Array.from({length: 12}).map((_, index) => (
                                     <Grid key={index} item xs={12} sm={6} md={4} lg={3} xl={3} >
                                         <GroupCardSkeleton/>
                                     </Grid>
